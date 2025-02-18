@@ -1,0 +1,4 @@
+enum IsolateReturnTypes {
+  success,
+  error,
+}
