@@ -4,9 +4,34 @@ import 'package:apyar/app/services/index.dart';
 import 'package:apyar/app/widgets/index.dart';
 import 'package:cherry_toast/cherry_toast.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
-class MorePage extends StatelessWidget {
+class MorePage extends StatefulWidget {
   const MorePage({super.key});
+
+  @override
+  State<MorePage> createState() => _MorePageState();
+}
+
+class _MorePageState extends State<MorePage> {
+  String version = '';
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    try {
+      final res = await PackageInfo.fromPlatform();
+      setState(() {
+        version = res.version;
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +46,7 @@ class MorePage extends StatelessWidget {
             //theme
             ListTileWithDesc(
               title: 'Dark Theme',
-              leading: const Icon(Icons.settings),
+              leading: const Icon(Icons.dark_mode_outlined),
               trailing: ValueListenableBuilder(
                 valueListenable: isDarkThemeNotifier,
                 builder: (context, value, child) => Checkbox(
@@ -51,6 +76,13 @@ class MorePage extends StatelessWidget {
                       builder: (context) => AppSettingScreen(),
                     ));
               },
+            ),
+            //version
+            ListTileWithDesc(
+              leading: Icon(Icons.cloud_upload),
+              title: 'Version',
+              desc: 'Current Version is $version',
+              onClick: () {},
             ),
           ],
         ),
