@@ -9,12 +9,13 @@ class ApyarProvider with ChangeNotifier {
   List<ApyarModel> get getList => _list;
   bool get isLoading => _isLoading;
 
-  Future<void> initList() async {
+  Future<void> initList({bool isReset = false}) async {
     try {
+      if (isReset == false && _list.isNotEmpty) {
+        return;
+      }
       _isLoading = true;
       notifyListeners();
-
-      // await Future.delayed(const Duration(seconds: 3));
 
       final res = await getApyarListIsolate();
 

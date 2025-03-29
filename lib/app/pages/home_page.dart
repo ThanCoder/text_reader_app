@@ -50,7 +50,9 @@ class _HomePageState extends State<HomePage> {
           //linux
           Platform.isLinux
               ? IconButton(
-                  onPressed: init,
+                  onPressed: () async {
+                    context.read<ApyarProvider>().initList(isReset: true);
+                  },
                   icon: const Icon(Icons.refresh),
                 )
               : Container(),
@@ -60,7 +62,7 @@ class _HomePageState extends State<HomePage> {
           ? TLoader()
           : RefreshIndicator(
               onRefresh: () async {
-                await init();
+                context.read<ApyarProvider>().initList(isReset: true);
               },
               child: ApyarListView(
                 list: apyarList,

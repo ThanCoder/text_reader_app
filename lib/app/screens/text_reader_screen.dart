@@ -6,6 +6,7 @@ import 'package:apyar/app/dialogs/text_reader_setting_dialog.dart';
 import 'package:apyar/app/models/index.dart';
 import 'package:apyar/app/notifiers/app_notifier.dart';
 import 'package:apyar/app/providers/bookmark_provider.dart';
+import 'package:apyar/app/screens/apyar_form_screen.dart';
 import 'package:apyar/app/services/index.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +38,19 @@ class _TextReaderScreenState extends State<TextReaderScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       init();
     });
+  }
+
+  void _close() async {
+    if (Platform.isAndroid) {
+      await ThanPkg.android.app.toggleKeepScreenOn(isKeep: false);
+      await ThanPkg.android.app.hideFullScreen();
+    }
+  }
+
+  @override
+  void dispose() {
+    _close();
+    super.dispose();
   }
 
   void init() {
@@ -108,24 +122,37 @@ class _TextReaderScreenState extends State<TextReaderScreen> {
   void _showMenu() {
     showModalBottomSheet(
       context: context,
-      builder: (context) => ListView(
-        children: [
-          ListTile(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            leading: Icon(Icons.edit),
-            title: Text('Edit'),
+      builder: (context) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: 200,
           ),
-          ListTile(
-            onTap: () {
-              Navigator.pop(context);
-              _showSettingDialog();
-            },
-            leading: Icon(Icons.settings),
-            title: Text('Setting'),
+          child: Column(
+            children: [
+              ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ApyarFormScreen(),
+                    ),
+                  );
+                },
+                leading: Icon(Icons.edit),
+                title: Text('Edit'),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  _showSettingDialog();
+                },
+                leading: Icon(Icons.settings),
+                title: Text('Setting'),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -169,7 +196,7 @@ class _TextReaderScreenState extends State<TextReaderScreen> {
                   ],
                 ),
           body: GestureDetector(
-            onTap: _toggleFullScreen,
+            onDoubleTap: _toggleFullScreen,
             child: ListView.separated(
               separatorBuilder: (context, index) => const Divider(),
               controller: _scrollController,
