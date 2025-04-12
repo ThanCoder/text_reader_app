@@ -29,7 +29,7 @@ class ApyarSeeAllView extends StatelessWidget {
     return Container(
       margin: margin,
       child: SizedBox(
-        height: 320,
+        height: 340,
         child: Column(
           spacing: 5,
           children: [
@@ -54,8 +54,8 @@ class ApyarSeeAllView extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: showList.length,
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 160,
-                  mainAxisExtent: 140,
+                  maxCrossAxisExtent: 170,
+                  mainAxisExtent: 130,
                   mainAxisSpacing: 5,
                   crossAxisSpacing: 5,
                 ),
