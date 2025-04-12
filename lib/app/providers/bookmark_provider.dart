@@ -1,21 +1,26 @@
-import 'package:apyar/app/models/index.dart';
-import 'package:apyar/app/services/index.dart';
+import 'package:apyar/app/models/apyar_model.dart';
+import 'package:apyar/app/services/bookmark_services.dart';
 import 'package:flutter/material.dart';
 
 class BookmarkProvider with ChangeNotifier {
-  final List<BookmarkModel> _list = [];
+  final List<ApyarModel> _list = [];
   bool _isLoading = false;
-  bool _isExists = false;
+  ApyarModel? _apyar;
 
-  List<BookmarkModel> get getList => _list;
+  List<ApyarModel> get getList => _list;
+  ApyarModel? get getCurrent => _apyar;
+
   bool get isLoading => _isLoading;
-  bool get isExists => _isExists;
 
-  Future<void> initList() async {
+  Future<void> initList({bool isReset = false}) async {
     try {
+      if (isReset == false && _list.isNotEmpty) {
+        return;
+      }
       _isLoading = true;
       notifyListeners();
-      final res = await getBookmarkList();
+
+      final res = await BookmarkServices.getList();
 
       _list.clear();
       _list.addAll(res);
@@ -27,41 +32,31 @@ class BookmarkProvider with ChangeNotifier {
     }
   }
 
-  Future<void> toggle({required String apyarTitle}) async {
-    try {
-      _isLoading = true;
-      notifyListeners();
-
-      final res = _list.where((bm) => bm.title == apyarTitle).toList();
-      if (res.isEmpty) {
-        //add
-        _list.insert(0, BookmarkModel(title: apyarTitle));
-      } else {
-        //delete
-        final delResult = _list.where((bm) => bm.title != apyarTitle).toList();
-        _list.clear();
-        _list.addAll(delResult);
-      }
-      //save bookmark
-      setBookmarkList(list: _list);
-
-      _isLoading = false;
-      notifyListeners();
-
-      //check
-      checkExists(apyarTitle: apyarTitle);
-    } catch (e) {
-      debugPrint('toggle: ${e.toString()}');
+  Future<void> toggle(ApyarModel apyar) async {
+    if (await isExists(apyar)) {
+      await remove(apyar);
+    } else {
+      await add(apyar);
     }
   }
 
-  void checkExists({required String apyarTitle}) {
-    final res = _list.where((bm) => bm.title == apyarTitle).toList();
-    if (res.isEmpty) {
-      _isExists = false;
-    } else {
-      _isExists = true;
-    }
+  Future<bool> isExists(ApyarModel apyar) async {
+    final res = _list.where((ap) => ap.title == apyar.title);
+    if (res.isNotEmpty) return true;
+    return false;
+  }
+
+  Future<void> add(ApyarModel apyar) async {
+    _list.insert(0, apyar);
+    BookmarkServices.setList(_list);
+    notifyListeners();
+  }
+
+  Future<void> remove(ApyarModel apyar) async {
+    final res = _list.where((ap) => ap.title != apyar.title).toList();
+    _list.clear();
+    _list.addAll(res);
+    BookmarkServices.setList(_list);
     notifyListeners();
   }
 }

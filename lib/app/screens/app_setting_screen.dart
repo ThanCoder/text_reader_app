@@ -1,7 +1,6 @@
 import 'package:apyar/app/constants.dart';
 import 'package:apyar/app/models/index.dart';
 import 'package:apyar/app/notifiers/app_notifier.dart';
-import 'package:apyar/app/services/app_path_services.dart';
 import 'package:apyar/app/services/index.dart';
 import 'package:apyar/app/widgets/index.dart';
 import 'package:cherry_toast/cherry_toast.dart';

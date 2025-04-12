@@ -1,7 +1,8 @@
 import 'package:apyar/app/models/apyar_model.dart';
 import 'package:apyar/app/notifiers/app_notifier.dart';
-import 'package:apyar/app/widgets/my_image_file.dart';
 import 'package:flutter/material.dart';
+
+import '../widgets/core/index.dart';
 
 class ApyarListView extends StatelessWidget {
   List<ApyarModel> list;

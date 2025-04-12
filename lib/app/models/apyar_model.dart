@@ -1,32 +1,36 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
-import 'package:apyar/app/utils/index.dart';
+import 'package:apyar/app/extensions/index.dart';
+import 'package:apyar/app/text_reader/text_reader_data_interface.dart';
 
-class ApyarModel {
+class ApyarModel implements TextReaderDataInterface<ApyarModel> {
   String title;
   String path;
   String genres;
   String desc;
   int date;
+  int number;
 
   late String coverPath;
   ApyarModel({
+    required this.date,
     this.title = 'Untitled',
     this.path = '',
     this.genres = '',
     this.desc = '',
-    required this.date,
+    this.number = 1,
   }) {
     coverPath = '$path/cover.png';
   }
 
   factory ApyarModel.fromPath(String path) {
-    final file = File(path);
+    final dir = Directory(path.trim());
+    String title = dir.path.getName();
+
     return ApyarModel(
-      title: getBasename(path),
+      title: title,
       path: path,
-      date: file.statSync().modified.millisecondsSinceEpoch,
+      date: dir.statSync().modified.millisecondsSinceEpoch,
     );
   }
 
@@ -49,7 +53,51 @@ class ApyarModel {
       };
 
   @override
+  String getContent() {
+    final file = File('$path/$number');
+    if (!file.existsSync()) return '';
+    return file.readAsStringSync();
+  }
+
+  String getChapterTitle() {
+    final dir = Directory(path);
+    String title = dir.path.getName();
+    final ch = File('$path/$number');
+    if (ch.existsSync()) {
+      final lines = ch.readAsLinesSync();
+      if (lines.isNotEmpty) {
+        if (lines.first.isNotEmpty) {
+          title = lines.first;
+        }
+      }
+    }
+    return title;
+  }
+
+  @override
+  bool isExistNext() {
+    final file = File('$path/${number + 1}');
+    return file.existsSync();
+  }
+
+  @override
+  bool isExistsPrev() {
+    final file = File('$path/${number - 1}');
+    return file.existsSync();
+  }
+
+  @override
+  ApyarModel getNext() {
+    return ApyarModel.fromPath('$path/${number + 1}');
+  }
+
+  @override
+  ApyarModel getPrev() {
+    return ApyarModel.fromPath('$path/${number - 1}');
+  }
+
+  @override
   String toString() {
-    return '\ntitle => $title\n';
+    return title;
   }
 }

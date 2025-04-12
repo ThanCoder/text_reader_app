@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 //debug
 const isDebugPrint = false;
 
+const appBrowserProxyHostUrl = 'https://node-browser.vercel.app';
+const appForwardProxyHostUrl = 'https://express-forward-proxy.vercel.app';
+
 //assets
 const defaultIconAssetsPath = 'assets/logo.webp';
 //version name

@@ -1,3 +1,3 @@
-export './home_page.dart';
-export './library_page.dart';
-export './more_page.dart';
+export 'home/home_page.dart';
+export 'home/library_page.dart';
+export 'home/more_page.dart';
