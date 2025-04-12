@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:apyar/app/components/apyar_see_all_view.dart';
+import 'package:apyar/app/customs/apyar_search.dart';
 import 'package:apyar/app/models/index.dart';
 import 'package:apyar/app/providers/apyar_provider.dart';
 import 'package:apyar/app/providers/bookmark_provider.dart';
@@ -52,10 +53,10 @@ class _HomePageState extends State<HomePage> {
           actions: [
             IconButton(
               onPressed: () {
-                // showSearch(
-                //   context: context,
-                //   delegate: ApyarSearchDelegate(list: list),
-                // );
+                showSearch(
+                  context: context,
+                  delegate: ApyarSearch(list: list),
+                );
               },
               icon: const Icon(Icons.search),
             ),
