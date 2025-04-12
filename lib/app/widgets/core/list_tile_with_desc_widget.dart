@@ -34,7 +34,7 @@ class ListTileWithDescWidget extends StatelessWidget {
                             fontStyle: FontStyle.italic,
                           ),
                         )
-                      : Container(),
+                      : SizedBox.shrink(),
                 ],
               ),
             ),

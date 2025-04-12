@@ -12,12 +12,17 @@ class ApyarProvider with ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  Future<void> initList({bool isReset = false}) async {
+  Future<void> initList({
+    bool isReset = false,
+    bool showLoading = true,
+  }) async {
     try {
       if (isReset == false && _list.isNotEmpty) {
         return;
       }
-      _isLoading = true;
+      if (showLoading) {
+        _isLoading = true;
+      }
       notifyListeners();
 
       final res = await ApyarServices.instance.getList();
@@ -25,7 +30,9 @@ class ApyarProvider with ChangeNotifier {
       _list.clear();
       _list.addAll(res);
 
-      _isLoading = false;
+      if (showLoading) {
+        _isLoading = false;
+      }
       notifyListeners();
     } catch (e) {
       debugPrint('initList: ${e.toString()}');
@@ -35,5 +42,46 @@ class ApyarProvider with ChangeNotifier {
   Future<void> setCurrent(ApyarModel apyar) async {
     _apyar = apyar;
     notifyListeners();
+  }
+
+  Future<void> add(ApyarModel apyar) async {
+    _list.add(apyar);
+    notifyListeners();
+  }
+
+  Future<void> insert(ApyarModel apyar) async {
+    _list.insert(0, apyar);
+    notifyListeners();
+  }
+
+  Future<void> remove(ApyarModel apyar) async {
+    final res = _list.where((ap) => ap.title != apyar.title).toList();
+    _list.clear();
+    _list.addAll(res);
+
+    notifyListeners();
+  }
+
+  //
+  // တစ်ခါတည်း အပြီး replace လုပ်မယ်
+  //
+  Future<void> replaceTitle(String title, ApyarModel apyar) async {
+    final res = _list.map((ap) {
+      if (ap.title == title) {
+        return apyar;
+      }
+      return ap;
+    }).toList();
+    _list.clear();
+    _list.addAll(res);
+    _apyar = apyar;
+
+    notifyListeners();
+  }
+
+  bool isExistsTitle(String title) {
+    final res = _list.where((ap) => ap.title == title);
+    if (res.isNotEmpty) return true;
+    return false;
   }
 }

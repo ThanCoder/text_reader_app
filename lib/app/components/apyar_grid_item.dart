@@ -24,8 +24,7 @@ class ApyarGridItem extends StatelessWidget {
                 Expanded(
                   child: MyImageFile(
                     path: apyar.coverPath,
-                    fit: BoxFit.fill,
-                    width: double.infinity,
+                    // fit: BoxFit.fill,
                   ),
                 ),
               ],

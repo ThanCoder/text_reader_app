@@ -35,6 +35,9 @@ class _CoverComponentsState extends State<CoverComponents> {
             });
             await Dio().download(url, widget.coverPath);
 
+            //clear image cache
+            await allRefresh();
+
             setState(() {
               isLoading = false;
             });
@@ -67,7 +70,7 @@ class _CoverComponentsState extends State<CoverComponents> {
         final file = File(path);
         await file.copy(widget.coverPath);
         //clear image cache
-        clearAndRefreshImage();
+        await allRefresh();
       }
       setState(() {
         isLoading = false;
@@ -80,28 +83,38 @@ class _CoverComponentsState extends State<CoverComponents> {
     }
   }
 
+  Future<void> allRefresh() async {
+    await clearAndRefreshImage();
+    await Future.delayed(Duration(seconds: 2));
+  }
+
   void _showMenu() {
     showModalBottomSheet(
       context: context,
-      builder: (context) => ListView(
-        children: [
-          ListTile(
-            onTap: () {
-              Navigator.pop(context);
-              _addFromPath();
-            },
-            leading: const Icon(Icons.add),
-            title: const Text('Add From Path'),
+      builder: (context) => ConstrainedBox(
+        constraints: BoxConstraints(minHeight: 150),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  _addFromPath();
+                },
+                leading: const Icon(Icons.add),
+                title: const Text('Add From Path'),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.pop(context);
+                  _downloadUrl();
+                },
+                leading: const Icon(Icons.add),
+                title: const Text('Add From Url'),
+              ),
+            ],
           ),
-          ListTile(
-            onTap: () {
-              Navigator.pop(context);
-              _downloadUrl();
-            },
-            leading: const Icon(Icons.add),
-            title: const Text('Add From Url'),
-          ),
-        ],
+        ),
       ),
     );
   }

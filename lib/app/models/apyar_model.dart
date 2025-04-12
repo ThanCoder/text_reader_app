@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:apyar/app/extensions/index.dart';
 import 'package:apyar/app/text_reader/text_reader_data_interface.dart';
+import 'package:apyar/app/utils/path_util.dart';
 
 class ApyarModel implements TextReaderDataInterface<ApyarModel> {
   String title;
@@ -23,15 +24,46 @@ class ApyarModel implements TextReaderDataInterface<ApyarModel> {
     coverPath = '$path/cover.png';
   }
 
-  factory ApyarModel.fromPath(String path) {
+  factory ApyarModel.fromPath(String path, {int number = 1}) {
     final dir = Directory(path.trim());
     String title = dir.path.getName();
 
     return ApyarModel(
       title: title,
       path: path,
+      number: number,
       date: dir.statSync().modified.millisecondsSinceEpoch,
     );
+  }
+
+  factory ApyarModel.create(String title) {
+    final dir =
+        Directory('${PathUtil.instance.getSourcePath()}/${title.trim()}');
+    if (dir.existsSync()) throw Exception('`already exists: ${dir.path}`');
+    dir.createSync();
+
+    return ApyarModel.fromPath(dir.path);
+  }
+
+  Future<void> delete() async {
+    final oldDir = Directory(path);
+    if (await oldDir.exists()) {
+      await oldDir.delete(recursive: true);
+    }
+  }
+
+  Future<String> updateTitle(String title) async {
+    final newDir =
+        Directory('${PathUtil.instance.getSourcePath()}/${title.trim()}');
+    final oldDir = Directory(path);
+    //mkdir
+    await newDir.create();
+    //move
+    for (var file in oldDir.listSync()) {
+      await file.rename('${newDir.path}/${file.getName()}');
+    }
+    await oldDir.delete(recursive: true);
+    return newDir.path;
   }
 
   factory ApyarModel.fromMap(Map<String, dynamic> map) {
@@ -51,6 +83,27 @@ class ApyarModel implements TextReaderDataInterface<ApyarModel> {
         'desc': desc,
         'date': date,
       };
+
+  String getNumberContent(int apyarNumber) {
+    final file = File('$path/$apyarNumber');
+    if (!file.existsSync()) return '';
+    return file.readAsStringSync();
+  }
+
+  void deleteNumber(int apyarNumber) {
+    final file = File('$path/$apyarNumber');
+    if (!file.existsSync()) return;
+    file.deleteSync();
+  }
+
+  String getNumberPath(int apyarNumber) {
+    return '$path/$apyarNumber';
+  }
+
+  void saveNumberContent(int apyarNumber, String content) {
+    final file = File('$path/$apyarNumber');
+    file.writeAsStringSync(content);
+  }
 
   @override
   String getContent() {
@@ -88,12 +141,12 @@ class ApyarModel implements TextReaderDataInterface<ApyarModel> {
 
   @override
   ApyarModel getNext() {
-    return ApyarModel.fromPath('$path/${number + 1}');
+    return ApyarModel.fromPath(path, number: number + 1);
   }
 
   @override
   ApyarModel getPrev() {
-    return ApyarModel.fromPath('$path/${number - 1}');
+    return ApyarModel.fromPath(path, number: number - 1);
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:apyar/app/action_button/apyar_add_button.dart';
 import 'package:apyar/app/components/apyar_see_all_view.dart';
 import 'package:apyar/app/customs/apyar_search.dart';
 import 'package:apyar/app/models/index.dart';
@@ -68,7 +69,8 @@ class _HomePageState extends State<HomePage> {
                     },
                     icon: const Icon(Icons.refresh),
                   )
-                : Container(),
+                : SizedBox.shrink(),
+            ApyarAddButton(),
           ],
         ),
         // Random

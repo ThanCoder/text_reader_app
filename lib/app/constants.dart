@@ -15,6 +15,7 @@ const appTitle = 'Apyar';
 const androidRootPath = "/storage/emulated/0";
 //config
 const appConfigFileName = 'main.config.json';
+const appTextReaderConfigFileName = 'text-reader.config.json';
 const appBookmarkFileName = 'book_mark_list.json';
 const appMainDatabaseName = 'main.db.json';
 const appGenresDatabaseName = 'genres.db.json';
