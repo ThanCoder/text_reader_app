@@ -29,6 +29,13 @@ class _ApyarAddButtonState extends State<ApyarAddButton> {
                   _addApyar();
                 },
               ),
+              ListTile(
+                leading: Icon(Icons.sort_by_alpha),
+                title: Text('Sort'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
             ],
           ),
         ),
@@ -38,7 +45,7 @@ class _ApyarAddButtonState extends State<ApyarAddButton> {
 
   void _addApyar() async {
     final provider = context.read<ApyarProvider>();
-    await provider.initList(isReset: true, showLoading: false);
+    // await provider.initList(isReset: true, showLoading: false);
     if (!mounted) return;
     showDialog(
       context: context,

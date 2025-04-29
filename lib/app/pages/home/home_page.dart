@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:apyar/app/action_button/apyar_add_button.dart';
 import 'package:apyar/app/components/apyar_see_all_view.dart';
 import 'package:apyar/app/customs/apyar_search.dart';
+import 'package:apyar/app/drawers/home_drawer.dart';
 import 'package:apyar/app/models/index.dart';
 import 'package:apyar/app/providers/apyar_provider.dart';
 import 'package:apyar/app/providers/bookmark_provider.dart';
@@ -30,6 +31,8 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> init() async {
     await context.read<ApyarProvider>().initList();
+    if (!mounted) return;
+    await context.read<BookmarkProvider>().initList(isReset: true);
   }
 
   void _goSeeAllScreen(String title, List<ApyarModel> list) {
@@ -49,6 +52,7 @@ class _HomePageState extends State<HomePage> {
 
     return CustomScrollView(
       slivers: [
+        // app bar
         SliverAppBar(
           title: Text(appName),
           actions: [
@@ -78,6 +82,7 @@ class _HomePageState extends State<HomePage> {
           child: ApyarSeeAllView(
             margin: EdgeInsets.only(bottom: 10),
             title: 'Random',
+            showLines: 1,
             list: randomList,
             onSeeAllClicked: _goSeeAllScreen,
             onClicked: (apyar) => goTextReaderScreen(context, apyar),
@@ -99,6 +104,7 @@ class _HomePageState extends State<HomePage> {
         SliverToBoxAdapter(
           child: ApyarSeeAllView(
             margin: EdgeInsets.only(bottom: 10),
+            showLines: 1,
             title: 'Book Mark',
             list: bookList,
             onSeeAllClicked: _goSeeAllScreen,
@@ -115,6 +121,8 @@ class _HomePageState extends State<HomePage> {
     final isLoading = provider.isLoading;
     final list = provider.getList;
     return MyScaffold(
+      contentPadding: 0,
+      drawer: HomeDrawer(),
       body: isLoading
           ? TLoader()
           : RefreshIndicator(

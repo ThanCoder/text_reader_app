@@ -22,8 +22,7 @@ void goApyarEditFormScreen(BuildContext context, ApyarModel apyar) async {
 }
 
 void goTextReaderScreen(BuildContext context, ApyarModel apyar) async {
-  final configPath =
-      '${PathUtil.instance.getConfigPath()}/$appTextReaderConfigFileName';
+  final configPath = '${PathUtil.getConfigPath()}/$appTextReaderConfigFileName';
 
   await context.read<ApyarProvider>().setCurrent(apyar);
   if (!context.mounted) return;

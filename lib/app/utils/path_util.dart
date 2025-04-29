@@ -6,50 +6,46 @@ import '../constants.dart';
 import '../notifiers/app_notifier.dart';
 
 class PathUtil {
-  static final PathUtil instance = PathUtil._();
-  PathUtil._();
-  factory PathUtil() => instance;
-
-  String getBasename(String path) {
+  static String getBasename(String path) {
     return path.split('/').last;
   }
 
-  String getHomePath() {
+  static String getHomePath() {
     return createDir(appRootPathNotifier.value);
   }
 
-  String getConfigPath() {
+  static String getConfigPath() {
     return createDir('${getHomePath()}/config');
   }
 
-  String getLibaryPath() {
+  static String getLibaryPath() {
     return createDir('${getHomePath()}/libary');
   }
 
-  String getDatabasePath() {
+  static String getDatabasePath() {
     return createDir('${getHomePath()}/database');
   }
 
-  String getDatabaseSourcePath() {
+  static String getDatabaseSourcePath() {
     return createDir('${getHomePath()}/databaseSource');
   }
 
-  String getCachePath() {
+  static String getCachePath() {
     String homeDir = createDir(appConfigPathNotifier.value);
     return createDir('$homeDir/cache');
   }
 
-  String getSourcePath() {
+  static String getSourcePath() {
     return createDir('${getHomePath()}/source');
   }
 
-  String getOutPath() {
+  static String getOutPath() {
     String download = createDir(
         '${appExternalPathNotifier.value}/${Platform.isAndroid ? 'Download' : 'Downloads'}');
     return createDir('$download/$appName');
   }
 
-  String createDir(String path) {
+  static String createDir(String path) {
     try {
       if (path.isEmpty) path;
       final dir = Directory(path);

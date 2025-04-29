@@ -31,9 +31,9 @@ class BookmarkServices {
   }
 
   static String _getSourcePath(String name) {
-    return '${PathUtil.instance.getSourcePath()}/$name';
+    return '${PathUtil.getSourcePath()}/$name';
   }
 
   static String get getDBPath =>
-      '${PathUtil.instance.getLibaryPath()}/$appBookmarkFileName';
+      '${PathUtil.getLibaryPath()}/$appBookmarkFileName';
 }

@@ -11,7 +11,7 @@ class ApyarServices {
   factory ApyarServices() => instance;
 
   Future<List<ApyarModel>> getList() async {
-    final path = PathUtil.instance.getSourcePath();
+    final path = PathUtil.getSourcePath();
     return await Isolate.run<List<ApyarModel>>(() async {
       try {
         List<ApyarModel> list = [];

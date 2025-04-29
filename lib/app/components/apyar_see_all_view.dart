@@ -1,14 +1,17 @@
 import 'package:apyar/app/components/apyar_grid_item.dart';
-import 'package:apyar/app/models/apyar_model.dart';
+import 'package:apyar/app/models/index.dart';
 import 'package:flutter/material.dart';
 
 class ApyarSeeAllView extends StatelessWidget {
   List<ApyarModel> list;
   String title;
   int showCount;
+  int? showLines;
+  double fontSize;
   void Function(String title, List<ApyarModel> list) onSeeAllClicked;
   void Function(ApyarModel novel) onClicked;
   EdgeInsetsGeometry? margin;
+  double padding;
 
   ApyarSeeAllView({
     super.key,
@@ -16,20 +19,28 @@ class ApyarSeeAllView extends StatelessWidget {
     required this.list,
     required this.onSeeAllClicked,
     required this.onClicked,
-    this.showCount = 12,
+    this.showCount = 8,
     this.margin,
+    this.showLines,
+    this.fontSize = 11,
+    this.padding = 6,
   });
 
   @override
   Widget build(BuildContext context) {
     final showList = list.take(showCount).toList();
-    if (showList.isEmpty) {
-      return SizedBox.shrink();
+    if (showList.isEmpty) return const SizedBox.shrink();
+    int _showLines = 1;
+    if (showLines == null && showList.length > 1) {
+      _showLines = 2;
+    } else {
+      _showLines = showLines ?? 1;
     }
     return Container(
+      padding: EdgeInsets.all(padding),
       margin: margin,
       child: SizedBox(
-        height: 340,
+        height: _showLines * 160,
         child: Column(
           spacing: 5,
           children: [
@@ -54,12 +65,13 @@ class ApyarSeeAllView extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: showList.length,
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 170,
+                  maxCrossAxisExtent: 150,
                   mainAxisExtent: 130,
                   mainAxisSpacing: 5,
                   crossAxisSpacing: 5,
                 ),
                 itemBuilder: (context, index) => ApyarGridItem(
+                  // fontSize: fontSize,
                   apyar: showList[index],
                   onClicked: onClicked,
                 ),

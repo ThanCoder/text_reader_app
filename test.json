@@ -1,0 +1,47 @@
+{
+ "title": "Dr Mg Nyo [အပြာစာပေ]",
+ "url": "https://drmgnyo.com/",
+ "desc": "",
+ "minVersion": "1.0.0",
+ "date": 1745889733017,
+ "mainQuery": {
+  "title": {
+   "query": ".clean-grid-grid-post-title a",
+   "type": "text",
+   "dataType": "text",
+   "attr": ""
+  },
+  "url": {
+   "query": ".clean-grid-grid-post-title a",
+   "type": "attr",
+   "dataType": "text",
+   "attr": "href"
+  },
+  "coverUrl": {
+   "query": ".clean-grid-grid-post-thumbnail img",
+   "type": "attr",
+   "dataType": "text",
+   "attr": "src"
+  },
+  "nextUrl": {
+   "query": ".wp-pagenavi .nextpostslink",
+   "type": "attr",
+   "dataType": "text",
+   "attr": "href"
+  }
+ },
+ "contentQueryList": [
+  {
+   "query": ".clean-grid-post-thumbnail-single",
+   "type": "attr",
+   "dataType": "image",
+   "attr": "src"
+  },
+  {
+   "query": ".entry-content",
+   "type": "text",
+   "dataType": "text",
+   "attr": ""
+  }
+ ]
+}

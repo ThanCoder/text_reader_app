@@ -1,33 +1,54 @@
 import 'package:apyar/app/components/index.dart';
-import 'package:apyar/app/scraper/scraper_bookmark_services.dart';
-import 'package:apyar/app/scraper/screens/scraper_content_bookmark_screen.dart';
-import 'package:apyar/app/utils/path_util.dart';
+import 'package:apyar/app/scraper/types/scraper_data_model.dart';
+import 'package:apyar/app/scraper/types/scraper_model.dart';
+import 'package:apyar/app/scraper/scraper_services.dart';
+import 'package:apyar/app/scraper/screens/scraper_content_screen.dart';
+import 'package:apyar/app/utils/index.dart';
+import 'package:apyar/app/widgets/cache_image_widget.dart';
 import 'package:apyar/app/widgets/index.dart';
 import 'package:flutter/material.dart';
 
-class LibraryPage extends StatefulWidget {
-  const LibraryPage({super.key});
+class ScraperHomeScreen extends StatefulWidget {
+  ScraperModel scraper;
+  ScraperHomeScreen({super.key, required this.scraper});
 
   @override
-  State<LibraryPage> createState() => _LibraryPageState();
+  State<ScraperHomeScreen> createState() => _ScraperHomeScreenState();
 }
 
-class _LibraryPageState extends State<LibraryPage> {
+class _ScraperHomeScreenState extends State<ScraperHomeScreen> {
+  final scrollController = ScrollController();
   @override
   void initState() {
+    scrollController.addListener(_onScroll);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => init());
+    init();
   }
 
+  @override
+  void dispose() {
+    scrollController.removeListener(_onScroll);
+    super.dispose();
+  }
+
+  List<ScraperDataModel> list = [];
+  String nextUrl = '';
   bool isLoading = false;
-  List<String> list = [];
+  bool isNextLoading = false;
+  double lastScroll = 0;
 
   Future<void> init() async {
     try {
       setState(() {
         isLoading = true;
       });
-      list = await ScraperBookmarkServices.getTitleList();
+
+      final res = await ScraperServices.getList(
+        widget.scraper.url,
+        scraper: widget.scraper.mainQuery,
+      );
+      list = res.list;
+      nextUrl = res.nextUrl;
 
       if (!mounted) return;
       setState(() {
@@ -42,15 +63,49 @@ class _LibraryPageState extends State<LibraryPage> {
     }
   }
 
+  void _onScroll() {
+    final pos = scrollController.position.pixels;
+    final max = scrollController.position.maxScrollExtent;
+    if (!isNextLoading && lastScroll != max && pos == max) {
+      lastScroll = max;
+      _loadPage();
+    }
+  }
+
+  void _loadPage() async {
+    try {
+      setState(() {
+        isNextLoading = true;
+      });
+
+      final res = await ScraperServices.getList(nextUrl,
+          scraper: widget.scraper.mainQuery);
+      list.addAll(res.list);
+      nextUrl = res.nextUrl;
+
+      if (!mounted) return;
+      setState(() {
+        isNextLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        isNextLoading = false;
+      });
+      showDialogMessage(context, e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MyScaffold(
       appBar: AppBar(
-        title: Text('Library'),
+        title: Text('Dr Mg Nyo [အပြာစာပေ]'),
       ),
       body: isLoading
           ? TLoader()
           : CustomScrollView(
+              controller: scrollController,
               slivers: [
                 SliverGrid.builder(
                   itemCount: list.length,
@@ -63,17 +118,15 @@ class _LibraryPageState extends State<LibraryPage> {
                   itemBuilder: (context, index) {
                     final data = list[index];
                     return GestureDetector(
-                      onTap: () async {
-                        final dataList =
-                            await ScraperBookmarkServices.getDataList(
-                                title: data);
-                        if (!mounted) return;
-
+                      onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ScraperContentBookmarkScreen(
-                                title: data, list: dataList),
+                            builder: (context) => ScraperContentScreen(
+                              title: data.title,
+                              url: data.url,
+                              scraper: widget.scraper,
+                            ),
                           ),
                         );
                       },
@@ -84,9 +137,11 @@ class _LibraryPageState extends State<LibraryPage> {
                             Column(
                               children: [
                                 Expanded(
-                                    child: MyImageFile(
-                                        path:
-                                            '${PathUtil.getCachePath()}/$data')),
+                                    child: CacheImageWidget(
+                                  url: data.coverUrl,
+                                  savedPath:
+                                      '${PathUtil.getCachePath()}/${data.title}',
+                                )),
                               ],
                             ),
                             Positioned(
@@ -98,7 +153,7 @@ class _LibraryPageState extends State<LibraryPage> {
                                   color: const Color.fromARGB(174, 37, 37, 37),
                                 ),
                                 child: Text(
-                                  data,
+                                  list[index].title,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   textAlign: TextAlign.center,
@@ -112,6 +167,8 @@ class _LibraryPageState extends State<LibraryPage> {
                     );
                   },
                 ),
+                SliverToBoxAdapter(
+                    child: isNextLoading ? TLoader() : SizedBox.shrink()),
               ],
             ),
     );

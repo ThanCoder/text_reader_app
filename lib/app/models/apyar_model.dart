@@ -37,8 +37,7 @@ class ApyarModel implements TextReaderDataInterface<ApyarModel> {
   }
 
   factory ApyarModel.create(String title) {
-    final dir =
-        Directory('${PathUtil.instance.getSourcePath()}/${title.trim()}');
+    final dir = Directory('${PathUtil.getSourcePath()}/${title.trim()}');
     if (dir.existsSync()) throw Exception('`already exists: ${dir.path}`');
     dir.createSync();
 
@@ -53,8 +52,7 @@ class ApyarModel implements TextReaderDataInterface<ApyarModel> {
   }
 
   Future<String> updateTitle(String title) async {
-    final newDir =
-        Directory('${PathUtil.instance.getSourcePath()}/${title.trim()}');
+    final newDir = Directory('${PathUtil.getSourcePath()}/${title.trim()}');
     final oldDir = Directory(path);
     //mkdir
     await newDir.create();
