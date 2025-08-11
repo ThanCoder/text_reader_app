@@ -32,7 +32,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
         '${Setting.appExternalPath}/.${Setting.instance.appName}';
     config = appConfigNotifier.value;
     forwardProxyController.text = config.forwardProxyUrl;
-    if (config.customPath.isEmpty) {
+    if (config.customPath.isNotEmpty) {
       customPathTextController.text = config.customPath;
     }
   }

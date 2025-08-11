@@ -22,6 +22,10 @@ class PostListItem extends StatelessWidget {
         if (onRightClicked == null) return;
         onRightClicked!(post);
       },
+      onLongPress: () {
+        if (onRightClicked == null) return;
+        onRightClicked!(post);
+      },
       child: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: Card(

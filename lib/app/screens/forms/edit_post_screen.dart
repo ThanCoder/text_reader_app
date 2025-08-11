@@ -23,6 +23,8 @@ class _EditPostScreenState extends State<EditPostScreen> {
   late PostModel post;
   final titleController = TextEditingController();
   final bodyController = TextEditingController();
+  final titleFocusNode = FocusNode();
+  final bodyFocusNode = FocusNode();
   String? titleError;
   List<PostModel> existsList = [];
 
@@ -37,6 +39,15 @@ class _EditPostScreenState extends State<EditPostScreen> {
     }
     super.initState();
     init();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    titleFocusNode.dispose();
+    bodyController.dispose();
+    bodyFocusNode.dispose();
+    super.dispose();
   }
 
   void init() {
@@ -56,7 +67,13 @@ class _EditPostScreenState extends State<EditPostScreen> {
       body: ScrollableColumn(
         children: [
           // cover
-          TCoverChooser(coverPath: post.getCoverPath),
+          TCoverChooser(
+            coverPath: post.getCoverPath,
+            onChanged: () {
+              titleFocusNode.unfocus();
+              bodyFocusNode.unfocus();
+            },
+          ),
           TTextField(
             label: Text('Title'),
             controller: titleController,
@@ -64,6 +81,16 @@ class _EditPostScreenState extends State<EditPostScreen> {
             isSelectedAll: true,
             errorText: titleError,
             onChanged: _onTitleChanged,
+          ),
+          // tags
+          TTagsWrapView(
+            title: Text('Tags'),
+            values: post.getTags,
+            allTags: PostModel.getAllTags,
+            onApply: (values) {
+              post.setTags(values);
+              setState(() {});
+            },
           ),
           TTextField(
             label: Text('Body'),

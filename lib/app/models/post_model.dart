@@ -71,6 +71,15 @@ class PostModel {
     date = DateTime.now();
   }
 
+  List<String> get getTags {
+    final list = tags.split(',').where((e) => e.isNotEmpty).toList();
+    return list;
+  }
+
+  void setTags(List<String> list) {
+    tags = list.join(',');
+  }
+
   @override
   String toString() {
     return title;
@@ -81,5 +90,9 @@ class PostModel {
 
   static Box<PostModel> get getBox {
     return Hive.box<PostModel>(dbName);
+  }
+
+  static List<String> get getAllTags {
+    return getBox.values.expand((e) => e.getTags).toSet().toList();
   }
 }

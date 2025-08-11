@@ -6,6 +6,7 @@ import 'package:text_reader/app/extension/post_extensions.dart';
 import 'package:text_reader/app/models/post_model.dart';
 import 'package:text_reader/app/routes_helper.dart';
 import 'package:text_reader/app/screens/forms/edit_post_screen.dart';
+import 'package:text_reader/app/text_reader/post_reader_screen.dart';
 import 'package:text_reader/other_libs/fetcher_v1.0.0/fetcher.dart';
 import 'package:text_reader/other_libs/fetcher_v1.0.0/others/fetcher_screen.dart';
 
@@ -34,24 +35,18 @@ class _HomePageState extends State<HomePage> {
           builder: (context, box, child) {
             final list = box.values.toList();
             list.sortDate();
-            return ListView.separated(
+            return ListView.builder(
                 itemBuilder: (context, index) => PostListItem(
                       post: list[index],
                       onRightClicked: _showItemMenu,
                       onClicked: (post) {
                         goRoute(
                           context,
-                          builder: (context) => EditPostScreen(
-                            post: post,
-                            isUpdate: true,
-                            onUpdated: (updatedPost) {
-                              PostModel.getBox.put(updatedPost.id, updatedPost);
-                            },
-                          ),
+                          builder: (context) => PostReaderScreen(post: post),
                         );
                       },
                     ),
-                separatorBuilder: (context, index) => Divider(),
+                // separatorBuilder: (context, index) => Divider(),
                 itemCount: list.length);
           }),
     );
@@ -126,22 +121,45 @@ class _HomePageState extends State<HomePage> {
 
   // item menu
   void _showItemMenu(PostModel post) {
-    showTMenuBottomSheet(context, children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text(post.title),
-      ),
-      Divider(),
-      ListTile(
-        iconColor: Colors.red,
-        leading: Icon(Icons.delete),
-        title: Text('Delete'),
-        onTap: () {
-          Navigator.pop(context);
-          _deleteConfirm(post);
+    showTMenuBottomSheet(
+      context,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(post.title),
+        ),
+        Divider(),
+        ListTile(
+          leading: Icon(Icons.edit_document),
+          title: Text('Edit'),
+          onTap: () {
+            Navigator.pop(context);
+            _editPost(post);
+          },
+        ),
+        ListTile(
+          iconColor: Colors.red,
+          leading: Icon(Icons.delete),
+          title: Text('Delete'),
+          onTap: () {
+            Navigator.pop(context);
+            _deleteConfirm(post);
+          },
+        ),
+      ],
+    );
+  }
+
+  void _editPost(PostModel post) {
+    goRoute(
+      context,
+      builder: (context) => EditPostScreen(
+        post: post,
+        onUpdated: (updatedPost) {
+          PostModel.getBox.put(updatedPost.id, updatedPost);
         },
-      )
-    ]);
+      ),
+    );
   }
 
   void _deleteConfirm(PostModel post) {

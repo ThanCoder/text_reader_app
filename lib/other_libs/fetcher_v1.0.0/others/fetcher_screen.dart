@@ -16,6 +16,7 @@ class FetcherScreen extends StatefulWidget {
 
 class _FetcherScreenState extends State<FetcherScreen> {
   final urlController = TextEditingController();
+  final urlFocusNode = FocusNode();
   SupportedSite? supportedSite;
   List<SupportedSite> siteList = FetcherServices.getSupportedSites;
   late FetcherData data;
@@ -31,6 +32,13 @@ class _FetcherScreenState extends State<FetcherScreen> {
     }
     super.initState();
     init();
+  }
+
+  @override
+  void dispose() {
+    urlController.dispose();
+    urlFocusNode.dispose();
+    super.dispose();
   }
 
   void init() {
@@ -55,6 +63,8 @@ class _FetcherScreenState extends State<FetcherScreen> {
                 maxLines: 1,
                 isSelectedAll: true,
                 controller: urlController,
+                autofocus: true,
+                focusNode: urlFocusNode,
                 onChanged: _onUrlChecked,
                 errorText: urlControllerError,
               ),
@@ -172,6 +182,7 @@ class _FetcherScreenState extends State<FetcherScreen> {
 
   void _onFetch() async {
     try {
+      urlFocusNode.unfocus();
       if (Fetcher.instance.onGetHttpContent == null) {
         throw Exception(Fetcher.getErrorLog);
       }
