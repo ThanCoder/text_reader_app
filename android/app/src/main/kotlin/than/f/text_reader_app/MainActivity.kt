@@ -1,4 +1,4 @@
-package com.example.text_reader
+package than.f.text_reader_app
 
 import io.flutter.embedding.android.FlutterActivity
 

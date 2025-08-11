@@ -1,0 +1,106 @@
+import 'package:flutter/material.dart';
+import 'package:t_widgets/t_widgets.dart';
+import 'package:text_reader/app/components/my_scaffold.dart';
+import 'package:text_reader/app/components/scrollable_column.dart';
+import 'package:text_reader/app/models/post_model.dart';
+
+class EditPostScreen extends StatefulWidget {
+  PostModel post;
+  bool isUpdate;
+  void Function(PostModel updatedPost) onUpdated;
+  EditPostScreen({
+    super.key,
+    required this.post,
+    required this.onUpdated,
+    this.isUpdate = false,
+  });
+
+  @override
+  State<EditPostScreen> createState() => _EditPostScreenState();
+}
+
+class _EditPostScreenState extends State<EditPostScreen> {
+  late PostModel post;
+  final titleController = TextEditingController();
+  final bodyController = TextEditingController();
+  String? titleError;
+  List<PostModel> existsList = [];
+
+  @override
+  void initState() {
+    post = widget.post;
+    titleController.text = post.title;
+    if (post.body.isNotEmpty) {
+      bodyController.text = post.body;
+    } else {
+      bodyController.text = post.getBody;
+    }
+    super.initState();
+    init();
+  }
+
+  void init() {
+    existsList = PostModel.getBox.values.map((e) => e).toList();
+    if (widget.isUpdate) {
+      existsList = existsList.where((e) => e.title != post.title).toList();
+    }
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MyScaffold(
+      appBar: AppBar(
+        title: Text('Edit: ${widget.post.title}'),
+      ),
+      body: ScrollableColumn(
+        children: [
+          // cover
+          TCoverChooser(coverPath: post.getCoverPath),
+          TTextField(
+            label: Text('Title'),
+            controller: titleController,
+            maxLines: 1,
+            isSelectedAll: true,
+            errorText: titleError,
+            onChanged: _onTitleChanged,
+          ),
+          TTextField(
+            label: Text('Body'),
+            controller: bodyController,
+            maxLines: null,
+          ),
+        ],
+      ),
+      floatingActionButton: titleError != null
+          ? null
+          : FloatingActionButton(
+              onPressed: _onUpdate,
+              child: Icon(Icons.save_as_rounded),
+            ),
+    );
+  }
+
+  void _onTitleChanged(String text) {
+    if (text.isEmpty) return;
+    final index = existsList.indexWhere((e) => e.title == text);
+    if (index != -1) {
+      //ရှိနေတယ်
+      titleError = 'post ရှိနေပါတယ်!...';
+    } else {
+      // မရှိ
+      titleError = null;
+    }
+    setState(() {});
+  }
+
+  void _onUpdate() {
+    post.title = titleController.text;
+    post.setBody(bodyController.text);
+    post.newDate();
+    // close
+    Navigator.pop(context);
+
+    widget.onUpdated(post);
+  }
+}
