@@ -1,6 +1,5 @@
-# apyar
+# Text Reader App
 
+## Platform 
 
-## Text Reader App
-
-## Linux,Android
+Linux,Android
