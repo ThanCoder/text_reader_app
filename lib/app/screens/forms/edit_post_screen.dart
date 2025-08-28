@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
-import 'package:text_reader/app/components/my_scaffold.dart';
-import 'package:text_reader/app/components/scrollable_column.dart';
-import 'package:text_reader/app/models/post_model.dart';
+import 'package:text_reader/app/core/models/post.dart';
 
 class EditPostScreen extends StatefulWidget {
-  PostModel post;
+  Post post;
   bool isUpdate;
-  void Function(PostModel updatedPost) onUpdated;
+  void Function(Post updatedPost) onUpdated;
   EditPostScreen({
     super.key,
     required this.post,
@@ -20,13 +18,13 @@ class EditPostScreen extends StatefulWidget {
 }
 
 class _EditPostScreenState extends State<EditPostScreen> {
-  late PostModel post;
+  late Post post;
   final titleController = TextEditingController();
   final bodyController = TextEditingController();
   final titleFocusNode = FocusNode();
   final bodyFocusNode = FocusNode();
   String? titleError;
-  List<PostModel> existsList = [];
+  List<Post> existsList = [];
 
   @override
   void initState() {
@@ -35,7 +33,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     if (post.body.isNotEmpty) {
       bodyController.text = post.body;
     } else {
-      bodyController.text = post.getBody;
+      // bodyController.text = post.getBody;
     }
     super.initState();
     init();
@@ -51,20 +49,18 @@ class _EditPostScreenState extends State<EditPostScreen> {
   }
 
   void init() {
-    existsList = PostModel.getBox.values.map((e) => e).toList();
-    if (widget.isUpdate) {
-      existsList = existsList.where((e) => e.title != post.title).toList();
-    }
+    // existsList = Post.getBox.values.map((e) => e).toList();
+    // if (widget.isUpdate) {
+    //   existsList = existsList.where((e) => e.title != post.title).toList();
+    // }
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return MyScaffold(
-      appBar: AppBar(
-        title: Text('Edit: ${widget.post.title}'),
-      ),
-      body: ScrollableColumn(
+    return TScaffold(
+      appBar: AppBar(title: Text('Edit: ${widget.post.title}')),
+      body: TScrollableColumn(
         children: [
           // cover
           TCoverChooser(
@@ -83,15 +79,15 @@ class _EditPostScreenState extends State<EditPostScreen> {
             onChanged: _onTitleChanged,
           ),
           // tags
-          TTagsWrapView(
-            title: Text('Tags'),
-            values: post.getTags,
-            allTags: PostModel.getAllTags,
-            onApply: (values) {
-              post.setTags(values);
-              setState(() {});
-            },
-          ),
+          // TTagsWrapView(
+          //   title: Text('Tags'),
+          //   values: post.getTags,
+          //   allTags: post.getAllTags,
+          //   onApply: (values) {
+          //     post.setTags(values);
+          //     setState(() {});
+          //   },
+          // ),
           TTextField(
             label: Text('Body'),
             controller: bodyController,

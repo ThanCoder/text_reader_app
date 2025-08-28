@@ -4,7 +4,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0
 
 environment:
-  sdk: ^3.6.1
+  sdk: ^3.8.1
 
 dependencies:
   change_app_package_name: ^1.5.0
@@ -13,13 +13,11 @@ dependencies:
     sdk: flutter
   flutter_launcher_icons: ^0.14.4
   provider: ^6.1.5
-  t_widgets: ^0.8.2
-  than_pkg: ^2.4.2
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
+  t_widgets: ^1.1.2
+  than_pkg: ^3.5.0
   uuid: ^4.5.1
   dio: ^5.9.0
-  t_html_parser: ^0.0.1
+  t_html_parser: ^1.0.0
 
 dev_dependencies:
   # dart run change_app_package_name:main [com.new.package.name]

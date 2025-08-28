@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:than_pkg/than_pkg.dart';
 
-import 'others/index.dart';
-export 'others/index.dart';
+import 'core/index.dart';
 
 class Setting {
   // singleton
@@ -17,13 +16,16 @@ class Setting {
   static String appRootPath = '';
   // app output path
   static String appExternalPath = '';
+  static String appVersionLabel = '';
   static ValueNotifier<AppConfig> get getAppConfigNotifier => appConfigNotifier;
   static String get getOutPath => PathUtil.getOutPath();
 
   //widget
   static Widget get getHomeScreen => AppSettingScreen();
-  static Widget get getThemeSwitcher => ThemeComponent();
-  static Widget get getSettingListTile => AppSettingListTile();
+  static Widget get getThemeSwitcherWidget => ThemeComponent();
+  static Widget get getSettingListTileWidget => AppSettingListTile();
+  static Widget get getCurrentVersionWidget => AppCurrentVersion();
+  static Widget get getCacheManagerWidget => AppCacheManager();
 
   static bool isShowDebugLog = true;
   static bool isAppRefreshConfigPathChanged = true;
@@ -35,10 +37,12 @@ class Setting {
     bool isShowDebugLog = true,
     void Function(BuildContext context, String message)? onShowMessage,
     bool isAppRefreshConfigPathChanged = false,
+    String appVersionLabel = '',
   }) async {
     try {
       Setting.isShowDebugLog = isShowDebugLog;
       Setting.isAppRefreshConfigPathChanged = isAppRefreshConfigPathChanged;
+      Setting.appVersionLabel = appVersionLabel;
       this.appName = appName;
       this.onShowMessage = onShowMessage;
 
@@ -109,6 +113,4 @@ class Setting {
   static String get getErrorLog {
     return ''' await Setting.instance.initSetting''';
   }
-
-
 }

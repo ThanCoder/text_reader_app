@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
 
-import '../setting.dart';
+import 'setting.dart';
+import 'core/android_app_services.dart';
+import 'app_config.dart';
+import 'core/app_notifier.dart';
+import 'core/theme_component.dart';
 
 class AppSettingScreen extends StatefulWidget {
   const AppSettingScreen({super.key});

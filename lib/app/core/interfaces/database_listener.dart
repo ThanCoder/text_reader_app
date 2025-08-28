@@ -1,0 +1,3 @@
+mixin DatabaseListener {
+  void onDatabaseChanged();
+}

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:text_reader/other_libs/setting_v2.0.0/setting.dart';
+import 'package:text_reader/other_libs/setting_v2.2.0/setting.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({super.key});
@@ -13,9 +13,9 @@ class MorePage extends StatelessWidget {
       body: Column(
         children: [
           // theme
-          Setting.getThemeSwitcher,
+          Setting.getThemeSwitcherWidget,
           Divider(),
-          Setting.getSettingListTile,
+          Setting.getSettingListTileWidget,
           // setting
         ],
       ),

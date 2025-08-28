@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
-import 'package:text_reader/app/models/post_model.dart';
+import 'package:text_reader/app/core/models/post.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 class PostListItem extends StatelessWidget {
-  PostModel post;
-  void Function(PostModel post) onClicked;
-  void Function(PostModel post)? onRightClicked;
+  Post post;
+  void Function(Post post) onClicked;
+  void Function(Post post)? onRightClicked;
   PostListItem({
     super.key,
     required this.post,
@@ -32,11 +32,7 @@ class PostListItem extends StatelessWidget {
           child: Row(
             spacing: 5,
             children: [
-              SizedBox(
-                width: 130,
-                height: 140,
-                child: TImage(source: post.getCoverPath),
-              ),
+              SizedBox(width: 130, height: 140, child: TImage(source: '')),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

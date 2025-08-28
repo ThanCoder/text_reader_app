@@ -11,7 +11,7 @@ class FetcherServices {
     final ele = THtmlParser.getHtmlElement(content);
     if (ele == null) return null;
 
-    final title = ele.getQuerySelectorText(selector: '.post-title', attr: '');
+    final title = ele.getQuerySelectorText(selector: '.post-title');
     data.title = title;
 
     // cover url
@@ -20,7 +20,7 @@ class FetcherServices {
     data.coverUrl = coverUrl;
 
     // content text
-    final body = ele.getQuerySelectorText(selector: '.entry-content', attr: '');
+    final body = ele.getQuerySelectorText(selector: '.entry-content');
     data.contentText = body.cleanScriptTag;
 
     return data;

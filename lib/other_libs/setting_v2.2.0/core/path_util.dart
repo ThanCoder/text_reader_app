@@ -5,15 +5,14 @@ import 'package:than_pkg/than_pkg.dart';
 import '../setting.dart';
 
 class PathUtil {
-  
-
   static Future<String> getAssetRealPathPath(String rootPath) async {
     final bytes = await rootBundle.load('assets/$rootPath');
     final name = rootPath.getName();
     final cacheFile = File('${PathUtil.getCachePath()}/$name');
     if (!cacheFile.existsSync()) {
       cacheFile.writeAsBytesSync(
-          bytes.buffer.asInt8List(bytes.offsetInBytes, bytes.lengthInBytes));
+        bytes.buffer.asInt8List(bytes.offsetInBytes, bytes.lengthInBytes),
+      );
     }
     return cacheFile.path;
   }
@@ -53,7 +52,8 @@ class PathUtil {
 
   static String getOutPath() {
     String download = createDir(
-        '${Setting.appExternalPath}/${Platform.isAndroid ? 'Download' : 'Downloads'}');
+      '${Setting.appExternalPath}/${Platform.isAndroid ? 'Download' : 'Downloads'}',
+    );
     return createDir('$download/${Setting.instance.appName}');
   }
 

@@ -1,6 +1,6 @@
-import 'package:text_reader/app/models/post_model.dart';
+import 'package:text_reader/app/core/models/post.dart';
 
-extension PostExtensions on List<PostModel> {
+extension PostExtensions on List<Post> {
   void sortDate({bool isNewest = true}) {
     sort((a, b) {
       if (isNewest) {
