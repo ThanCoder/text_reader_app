@@ -22,4 +22,22 @@ extension PostExtensions on List<Post> {
       return 0;
     });
   }
+
+  void sortTitle({bool isAtoZ = true}) {
+    sort((a, b) {
+      if (isAtoZ) {
+        return a.title.compareTo(b.title);
+      } else {
+        return b.title.compareTo(a.title);
+      }
+    });
+  }
+
+  void sortRandom({bool isRandom = true}) {
+    if (isRandom) {
+      return shuffle();
+    } else {
+      sortTitle();
+    }
+  }
 }

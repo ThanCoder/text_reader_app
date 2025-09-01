@@ -1,10 +1,10 @@
 {
- "customPath": "/home/than/.text_reader_app",
+ "customPath": "/home/than/Documents/apyar_source",
  "forwardProxyUrl": "",
  "browserForwardProxyUrl": "",
  "proxyUrl": "",
  "hostUrl": "",
- "isUseCustomPath": false,
+ "isUseCustomPath": true,
  "isUseForwardProxy": false,
  "isUseProxy": false,
  "isDarkTheme": true

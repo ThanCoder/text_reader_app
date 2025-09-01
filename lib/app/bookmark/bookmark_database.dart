@@ -2,7 +2,7 @@ import 'package:text_reader/app/bookmark/bookmark.dart';
 import 'package:text_reader/app/core/interfaces/json_database.dart';
 
 class BookmarkDatabase extends JsonDatabase<Bookmark> {
-  BookmarkDatabase({required super.dbPath, required super.fileStorage});
+  BookmarkDatabase({required super.root, required super.fileStorage});
 
   @override
   Future<void> delete(Bookmark value) async {

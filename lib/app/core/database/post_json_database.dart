@@ -2,7 +2,7 @@ import 'package:text_reader/app/core/interfaces/json_database.dart';
 import 'package:text_reader/app/core/models/post.dart';
 
 class PostJsonDatabase extends JsonDatabase<Post> {
-  PostJsonDatabase({required super.dbPath, required super.fileStorage});
+  PostJsonDatabase({required super.root, required super.fileStorage});
 
   @override
   Future<void> delete(Post value) {

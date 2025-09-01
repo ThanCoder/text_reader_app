@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
+import 'package:text_reader/app/services/post_services.dart';
 import 'package:text_reader/other_libs/fetcher_v1.0.0/fetcher.dart';
 import 'package:text_reader/other_libs/setting_v2.2.0/setting.dart';
 import 'package:than_pkg/than_pkg.dart';
@@ -27,7 +28,10 @@ void main() async {
 
   await Setting.instance.initSetting(
     appName: 'text_reader_app',
-    isAppRefreshConfigPathChanged: true,
+    onShowMessage: (context, message) {
+      showTSnackBar(context, message);
+      PostServices.clearDBCache();
+    },
   );
   // fetcher
 

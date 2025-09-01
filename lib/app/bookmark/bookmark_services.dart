@@ -7,16 +7,20 @@ class BookmarkServices {
   static BookmarkDatabase? _cacheDB;
 
   static Future<List<Bookmark>> getAll() async {
-    final db = await getDB();
+    final db = getDB();
     return db.getAll();
   }
 
-  static Future<BookmarkDatabase> getDB() async {
+  static BookmarkDatabase getDB() {
     _cacheDB ??= BookmarkDatabase(
-      dbPath: '${PathUtil.getLibaryPath()}/bookmark.db.json',
+      root: '${PathUtil.getLibaryPath()}/bookmark.db.json',
       fileStorage: FolderFileStorage(baseDir: PathUtil.getSourcePath()),
     );
     return _cacheDB!;
+  }
+
+  static void clearDB() {
+    _cacheDB = null;
   }
 
   static Future<bool> isExists(String id) async {

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:text_reader/app/bookmark/bookmark_button.dart';
+import 'package:text_reader/app/core/interfaces/database_listener.dart';
 import 'package:text_reader/app/core/models/post.dart';
+import 'package:text_reader/app/extension/post_extensions.dart';
 import 'package:text_reader/app/routes_helper.dart';
+import 'package:text_reader/app/screens/forms/edit_post_screen.dart';
+import 'package:text_reader/app/screens/search_screen.dart';
 import 'package:text_reader/app/services/post_services.dart';
+import 'package:than_pkg/than_pkg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,44 +18,139 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with DatabaseListener {
+  final searchController = SearchController();
+
+  @override
+  void initState() {
+    PostServices.getDB().addListener(this);
+    super.initState();
+    init();
+  }
+
+  @override
+  void onDatabaseChanged() {
+    if (!mounted) return;
+    init();
+  }
+
+  @override
+  void dispose() {
+    PostServices.getDB().removeListener(this);
+    super.dispose();
+  }
+
+  bool isLoading = false;
+  List<Post> postList = [];
+  List<Post> searchResult = [];
+  // sort
+  List<TSort> sortList = [
+    ...TSort.getDefaultList,
+    TSort(id: 1, title: 'Random', ascTitle: 'Random', descTitle: 'No Random'),
+  ];
+  int sortId = TSort.getDateId;
+  bool isSortIsAsc = true;
+
+  Future<void> init() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      postList = await PostServices.getAll();
+
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+      _onSort();
+    } catch (e) {
+      if (!mounted) return;
+      showTMessageDialogError(context, e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Text Reader App'),
-        actions: [
-          IconButton(onPressed: _showMenu, icon: Icon(Icons.more_vert_rounded)),
-        ],
+      body: RefreshIndicator.adaptive(
+        onRefresh: init,
+        child: CustomScrollView(slivers: [_getAppBar(), _getListWidget()]),
       ),
-      body: CustomScrollView(slivers: [_getListWidget()]),
+    );
+  }
+
+  Widget _getAppBar() {
+    return SliverAppBar(
+      floating: true,
+      snap: false,
+      title: Text('Text Reader App'),
+      actions: [
+        !TPlatform.isDesktop
+            ? SizedBox.shrink()
+            : IconButton(onPressed: init, icon: Icon(Icons.refresh)),
+        IconButton(onPressed: _showSearch, icon: Icon(Icons.search)),
+        IconButton(onPressed: _showSort, icon: Icon(Icons.sort)),
+        IconButton(onPressed: _showMenu, icon: Icon(Icons.more_vert_rounded)),
+      ],
     );
   }
 
   Widget _getListWidget() {
-    return FutureBuilder(
-      future: PostServices.getAll(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return SliverFillRemaining(child: Center(child: TLoader.random()));
-        }
-        final list = snapshot.data ?? [];
-        return SliverList.separated(
-          itemCount: list.length,
-          separatorBuilder: (context, index) => Divider(),
-          itemBuilder: (context, index) {
-            final post = list[index];
-            return ListTile(
-              title: Text(post.title),
-              trailing: BookmarkButton(post: post),
-              onTap: () {
-                goTextReader(context, post: post);
-              },
-            );
-          },
-        );
+    if (isLoading) {
+      return SliverFillRemaining(child: Center(child: TLoader.random()));
+    }
+    return SliverList.separated(
+      itemCount: postList.length,
+      separatorBuilder: (context, index) => Divider(),
+      itemBuilder: (context, index) {
+        final post = postList[index];
+        return _getListItem(post);
       },
     );
+  }
+
+  Widget _getListItem(Post post) {
+    return ListTile(
+      title: Text(post.title),
+      trailing: BookmarkButton(post: post),
+      onTap: () {
+        goTextReader(context, post: post);
+      },
+      onLongPress: () => _showItemMenu(post),
+    ).animate(delay: Duration(milliseconds: 400)).slideX();
+  }
+
+  // sort
+  void _showSort() {
+    showTSortDialog(
+      context,
+      currentId: sortId,
+      sortList: sortList,
+      isAsc: isSortIsAsc,
+      submitText: Text('Sort'),
+      sortDialogCallback: (id, isAsc) {
+        isSortIsAsc = isAsc;
+        sortId = id;
+        _onSort();
+      },
+    );
+  }
+
+  void _onSort() {
+    if (sortId == TSort.getDateId) {
+      postList.sortDate(isNewest: isSortIsAsc);
+    }
+    if (sortId == TSort.getTitleId) {
+      postList.sortTitle(isAtoZ: isSortIsAsc);
+    }
+    if (sortId == 1) {
+      postList.sortRandom(isRandom: isSortIsAsc);
+    }
+    setState(() {});
+  }
+
+  void _showSearch() {
+    goRoute(context, builder: (context) => SearchScreen(list: postList));
   }
 
   // main menu
@@ -78,19 +179,31 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _newPost() {
-    // final box = Post.getBox;
-    // final post = Post.create();
-    // box.put(post.id, post);
-    // goRoute(
-    //   context,
-    //   builder: (context) => EditPostScreen(
-    //     post: post,
-    //     isUpdate: true,
-    //     onUpdated: (updatedPost) {
-    //       Post.getBox.put(updatedPost.id, updatedPost);
-    //     },
-    //   ),
-    // );
+    showTReanmeDialog(
+      context,
+      barrierDismissible: false,
+      text: 'Untitled',
+      submitText: 'New',
+      onCheckIsError: (text) {
+        final res = postList.indexWhere((e) => e.title == (text.trim()));
+        return res == -1 ? null : 'post ရှိနေပါတယ်.အမည်ပြောင်းလဲပေးပါ!';
+      },
+      onSubmit: (text) async {
+        final post = Post.create(title: text, id: text);
+        await PostServices.getDB().add(post);
+        if (!mounted) return;
+        goRoute(
+          context,
+          builder: (context) => EditPostScreen(
+            post: post,
+            isUpdate: true,
+            onUpdated: (updatedPost) {
+              PostServices.getDB().update(updatedPost);
+            },
+          ),
+        );
+      },
+    );
   }
 
   void _newPostFromFetcher() {
@@ -145,15 +258,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _editPost(Post post) {
-    // goRoute(
-    //   context,
-    //   builder: (context) => EditPostScreen(
-    //     post: post,
-    //     onUpdated: (updatedPost) {
-    //       Post.getBox.put(updatedPost.id, updatedPost);
-    //     },
-    //   ),
-    // );
+    goRoute(
+      context,
+      builder: (context) => EditPostScreen(
+        post: post,
+        isUpdate: true,
+        onUpdated: (updatedPost) {
+          PostServices.getDB().update(updatedPost);
+        },
+      ),
+    );
   }
 
   void _deleteConfirm(Post post) {
@@ -162,7 +276,7 @@ class _HomePageState extends State<HomePage> {
       contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
       submitText: 'Delete',
       onSubmit: () {
-        post.delete();
+        PostServices.getDB().delete(post);
       },
     );
   }

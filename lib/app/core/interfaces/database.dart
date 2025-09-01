@@ -3,7 +3,8 @@ import 'package:text_reader/app/core/interfaces/file_storage.dart';
 
 abstract class Database<T> {
   FileStorage fileStorage;
-  Database({required this.fileStorage});
+  String root;
+  Database({required this.fileStorage, required this.root});
   Future<List<T>> getAll();
   Future<void> add(T value);
   Future<void> update(T value);

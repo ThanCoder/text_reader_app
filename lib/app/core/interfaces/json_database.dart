@@ -4,9 +4,8 @@ import 'package:text_reader/app/core/interfaces/data_io.dart';
 import 'package:text_reader/app/core/interfaces/database.dart';
 
 abstract class JsonDatabase<T> extends Database<T> {
-  String dbPath;
   DataIO io;
-  JsonDatabase({required this.dbPath, required super.fileStorage})
+  JsonDatabase({required super.root, required super.fileStorage})
     : io = JsonIO.instance;
 
   T from(Map<String, dynamic> map);
@@ -14,7 +13,7 @@ abstract class JsonDatabase<T> extends Database<T> {
 
   @override
   Future<List<T>> getAll() async {
-    final source = await io.read(dbPath);
+    final source = await io.read(root);
     if (source.isEmpty) return [];
     List<dynamic> jsonList = jsonDecode(source);
     return jsonList.map((e) => from(e)).toList();
@@ -30,10 +29,11 @@ abstract class JsonDatabase<T> extends Database<T> {
   Future<void> save(List<T> list, {bool isPretty = true}) async {
     final jsonList = list.map((e) => to(e)).toList();
     await io.write(
-      dbPath,
+      root,
       isPretty
           ? JsonEncoder.withIndent(' ').convert(jsonList)
           : jsonEncode(jsonList),
     );
+    notify();
   }
 }

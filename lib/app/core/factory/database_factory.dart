@@ -14,14 +14,14 @@ class DatabaseFactory {
     if (T == Post) {
       if (type == DatabaseTypes.folder) {
         final db = PostFolderDatabase(
-          baseDir: baseDir,
+          root: baseDir,
           fileStorage: FolderFileStorage(baseDir: baseDir),
         );
         return db as Database<T>;
       }
       if (type == DatabaseTypes.json) {
         final db = PostJsonDatabase(
-          dbPath: dbPath,
+          root: dbPath,
           fileStorage: FolderFileStorage(baseDir: baseDir),
         );
         return db as Database<T>;
