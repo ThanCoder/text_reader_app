@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:t_widgets/widgets/t_loader.dart';
 import 'package:text_reader/app/bookmark/bookmark.dart';
 import 'package:text_reader/app/bookmark/bookmark_services.dart';
+import 'package:text_reader/app/core/interfaces/database.dart';
 import 'package:text_reader/app/core/models/post.dart';
 
 class BookmarkButton extends StatefulWidget {
@@ -12,11 +13,24 @@ class BookmarkButton extends StatefulWidget {
   State<BookmarkButton> createState() => _BookmarkButtonState();
 }
 
-class _BookmarkButtonState extends State<BookmarkButton> {
+class _BookmarkButtonState extends State<BookmarkButton> with DatabaseListener {
+  @override
+  void onDatabaseChanged() {
+    if (!mounted) return;
+    init();
+  }
+
   @override
   void initState() {
+    BookmarkServices.getDB.addListener(this);
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => init());
+  }
+
+  @override
+  void dispose() {
+    BookmarkServices.getDB.removeListener(this);
+    super.dispose();
   }
 
   bool isExists = false;

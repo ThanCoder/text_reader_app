@@ -41,5 +41,6 @@ abstract class JsonDatabase<T> extends Database<T> {
     final file = File(root);
     final jsonList = list.map((e) => to(e)).toList();
     await file.writeAsString(JsonEncoder.withIndent(' ').convert(jsonList));
+    notify();
   }
 }

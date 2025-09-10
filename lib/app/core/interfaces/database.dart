@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:flutter/widgets.dart';
+
 import 'storage.dart';
 
 abstract class Database<T> {
@@ -26,8 +28,12 @@ abstract class Database<T> {
   }
 
   void notify() {
-    for (var ev in _listener) {
-      ev.onDatabaseChanged();
+    try {
+      for (var ev in _listener) {
+        ev.onDatabaseChanged();
+      }
+    } catch (e) {
+      debugPrint('[Database:notify]: ${e.toString()}');
     }
   }
 }
