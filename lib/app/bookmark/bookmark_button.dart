@@ -54,10 +54,10 @@ class _BookmarkButtonState extends State<BookmarkButton> {
   }
 
   void _toggle() async {
-    final db = await BookmarkServices.getDB();
+    final db = BookmarkServices.getDB;
     final book = Bookmark(title: widget.post.title, id: widget.post.id);
     if (isExists) {
-      db.delete(book);
+      db.delete(book.id);
     } else {
       db.add(book);
     }

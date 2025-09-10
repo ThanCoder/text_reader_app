@@ -1,21 +1,16 @@
 import 'package:text_reader/app/bookmark/bookmark.dart';
 import 'package:text_reader/app/bookmark/bookmark_database.dart';
-import 'package:text_reader/app/core/file_storage/folder_file_storage.dart';
-import 'package:text_reader/other_libs/setting_v2.2.0/core/path_util.dart';
 
 class BookmarkServices {
   static BookmarkDatabase? _cacheDB;
 
   static Future<List<Bookmark>> getAll() async {
-    final db = getDB();
+    final db = getDB;
     return db.getAll();
   }
 
-  static BookmarkDatabase getDB() {
-    _cacheDB ??= BookmarkDatabase(
-      root: '${PathUtil.getLibaryPath()}/bookmark.db.json',
-      fileStorage: FolderFileStorage(baseDir: PathUtil.getSourcePath()),
-    );
+  static BookmarkDatabase get getDB {
+    _cacheDB ??= BookmarkDatabase();
     return _cacheDB!;
   }
 

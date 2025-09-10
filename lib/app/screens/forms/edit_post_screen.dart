@@ -115,7 +115,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return await file.readAsString();
   }
 
-  String get _getPostPath => '${PostServices.getDB().root}/${widget.post.id}';
+  String get _getPostPath => '${PostServices.getDB.root}/${widget.post.id}';
 
   void _onTitleChanged(String text) {
     if (text.isEmpty) return;

@@ -46,8 +46,10 @@ class _TextReaderScreenState extends State<TextReaderScreen> {
 
   Future<void> init() async {
     try {
-      final path = await PostServices.getAbsPath('${widget.post.title}/1');
-      final file = File(path);
+      final path = await PostServices.getDB.storage.getPath(
+        '${widget.post.id}/1',
+      );
+      final file = File(path ?? '');
       if (!file.existsSync()) return;
       final content = await file.readAsString();
       list = content.split('\n\n');

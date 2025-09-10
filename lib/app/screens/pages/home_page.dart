@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:text_reader/app/bookmark/bookmark_button.dart';
-import 'package:text_reader/app/core/interfaces/database_listener.dart';
+import 'package:text_reader/app/core/interfaces/database.dart';
 import 'package:text_reader/app/core/models/post.dart';
 import 'package:text_reader/app/extension/post_extensions.dart';
 import 'package:text_reader/app/routes_helper.dart';
@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
 
   @override
   void initState() {
-    PostServices.getDB().addListener(this);
+    PostServices.getDB.addListener(this);
     super.initState();
     init();
   }
@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
 
   @override
   void dispose() {
-    PostServices.getDB().removeListener(this);
+    PostServices.getDB.removeListener(this);
     super.dispose();
   }
 
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
       },
       onSubmit: (text) async {
         final post = Post.create(title: text, id: text);
-        await PostServices.getDB().add(post);
+        await PostServices.getDB.add(post);
         if (!mounted) return;
         goRoute(
           context,
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
             post: post,
             isUpdate: true,
             onUpdated: (updatedPost) {
-              PostServices.getDB().update(updatedPost);
+              PostServices.getDB.update(post.id, updatedPost);
             },
           ),
         );
@@ -264,7 +264,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
         post: post,
         isUpdate: true,
         onUpdated: (updatedPost) {
-          PostServices.getDB().update(updatedPost);
+          PostServices.getDB.update(post.id, updatedPost);
         },
       ),
     );
@@ -276,7 +276,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
       contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
       submitText: 'Delete',
       onSubmit: () {
-        PostServices.getDB().delete(post);
+        PostServices.getDB.delete(post.id);
       },
     );
   }

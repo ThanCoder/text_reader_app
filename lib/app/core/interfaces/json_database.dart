@@ -1,23 +1,18 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:text_reader/app/core/interfaces/data_io.dart';
-import 'package:text_reader/app/core/interfaces/database.dart';
+import 'package:flutter/widgets.dart';
+import 'package:than_pkg/than_pkg.dart';
+
+import 'database.dart';
 
 abstract class JsonDatabase<T> extends Database<T> {
-  DataIO io;
-  JsonDatabase({required super.root, required super.fileStorage})
-    : io = JsonIO.instance;
+  final JsonIO io = JsonIO.instance;
+
+  JsonDatabase({required super.root, required super.storage});
 
   T from(Map<String, dynamic> map);
   Map<String, dynamic> to(T value);
-
-  @override
-  Future<List<T>> getAll() async {
-    final source = await io.read(root);
-    if (source.isEmpty) return [];
-    List<dynamic> jsonList = jsonDecode(source);
-    return jsonList.map((e) => from(e)).toList();
-  }
 
   @override
   Future<void> add(T value) async {
@@ -26,14 +21,25 @@ abstract class JsonDatabase<T> extends Database<T> {
     await save(list);
   }
 
-  Future<void> save(List<T> list, {bool isPretty = true}) async {
+  @override
+  Future<List<T>> getAll() async {
+    final file = File(root);
+    List<T> list = [];
+    if (!file.existsSync()) return list;
+    final source = await file.readAsString();
+    if (source.isEmpty) return list;
+    try {
+      List<dynamic> jsonList = jsonDecode(source);
+      list = jsonList.map((e) => from(e)).toList();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return list;
+  }
+
+  Future<void> save(List<T> list) async {
+    final file = File(root);
     final jsonList = list.map((e) => to(e)).toList();
-    await io.write(
-      root,
-      isPretty
-          ? JsonEncoder.withIndent(' ').convert(jsonList)
-          : jsonEncode(jsonList),
-    );
-    notify();
+    await file.writeAsString(JsonEncoder.withIndent(' ').convert(jsonList));
   }
 }

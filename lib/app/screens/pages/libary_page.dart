@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:text_reader/app/bookmark/bookmark.dart';
 import 'package:text_reader/app/bookmark/bookmark_services.dart';
-import 'package:text_reader/app/core/interfaces/database_listener.dart';
+import 'package:text_reader/app/core/interfaces/database.dart';
 import 'package:text_reader/app/core/models/post.dart';
 import 'package:text_reader/app/routes_helper.dart';
 import 'package:text_reader/app/services/post_services.dart';
@@ -17,13 +17,13 @@ class LibaryPage extends StatefulWidget {
 class _LibaryPageState extends State<LibaryPage> with DatabaseListener {
   @override
   void initState() {
-    BookmarkServices.getDB().addListener(this);
+    BookmarkServices.getDB.addListener(this);
     super.initState();
   }
 
   @override
   void dispose() {
-    BookmarkServices.getDB().removeListener(this);
+    BookmarkServices.getDB.removeListener(this);
     super.dispose();
   }
 
@@ -99,7 +99,7 @@ class _LibaryPageState extends State<LibaryPage> with DatabaseListener {
       contentText: 'ဖျက်ချင်တာ သေချာပြီလား?',
       submitText: 'Remove',
       onSubmit: () {
-        BookmarkServices.getDB().delete(book);
+        BookmarkServices.getDB.delete(book.id);
       },
     );
   }

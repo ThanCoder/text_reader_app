@@ -1,24 +1,24 @@
-import 'package:text_reader/app/core/interfaces/database_listener.dart';
-import 'package:text_reader/app/core/interfaces/file_storage.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
+import 'storage.dart';
 
 abstract class Database<T> {
-  FileStorage fileStorage;
-  String root;
-  Database({required this.fileStorage, required this.root});
+  final String root;
+  final Storage storage;
+  Database({required this.root, required this.storage});
+
   Future<List<T>> getAll();
   Future<void> add(T value);
-  Future<void> update(T value);
-  Future<void> delete(T value);
-
+  Future<void> update(String id, T value);
+  Future<void> delete(String id);
   // listener
-  final List<DatabaseListener> _listener = [];
-
-  void addListener(DatabaseListener eve) {
-    _listener.add(eve);
+  static final List<DatabaseListener> _listener = [];
+  void addListener(DatabaseListener listener) {
+    _listener.add(listener);
   }
 
-  void removeListener(DatabaseListener eve) {
-    _listener.remove(eve);
+  void removeListener(DatabaseListener listener) {
+    _listener.remove(listener);
   }
 
   void clearListener() {
@@ -26,8 +26,12 @@ abstract class Database<T> {
   }
 
   void notify() {
-    for (var eve in _listener) {
-      eve.onDatabaseChanged();
+    for (var ev in _listener) {
+      ev.onDatabaseChanged();
     }
   }
+}
+
+mixin DatabaseListener {
+  void onDatabaseChanged();
 }

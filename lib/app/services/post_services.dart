@@ -3,14 +3,13 @@ import 'package:text_reader/app/core/factory/database_factory.dart';
 import 'package:text_reader/app/core/interfaces/database.dart';
 import 'package:text_reader/app/core/models/post.dart';
 import 'package:text_reader/app/core/types/database_types.dart';
-import 'package:text_reader/other_libs/setting_v2.2.0/core/path_util.dart';
 
 class PostServices {
   static final Map<String, Database<Post>> _cacheDB = {};
 
   static Future<List<Post>> getAll() async {
-    final db = getDB();
-    final list = await db.getAll();
+    final list = await getDB.getAll();
+    // sort
     list.sort((a, b) {
       if (a.date.millisecondsSinceEpoch > b.date.millisecondsSinceEpoch) {
         return -1;
@@ -24,8 +23,8 @@ class PostServices {
   }
 
   static Future<String> getAbsPath(String name) async {
-    final db = PostServices.getDB();
-    return db.fileStorage.getAbsPath(name);
+    final db = PostServices.getDB;
+    return db.storage.root;
   }
 
   static void clearDBCache() {
@@ -33,15 +32,11 @@ class PostServices {
     BookmarkServices.clearDB();
   }
 
-  static Database<Post> getDB() {
+  static Database<Post> get getDB {
     final dbType = DatabaseTypes.folder;
     final db = _cacheDB[dbType.name];
     if (db == null) {
-      _cacheDB[dbType.name] = DatabaseFactory.create<Post>(
-        baseDir: PathUtil.getSourcePath(),
-        dbPath: '${PathUtil.getDatabasePath()}/main.db.json',
-        type: dbType,
-      );
+      _cacheDB[dbType.name] = DatabaseFactory.create<Post>(type: dbType);
     }
 
     return _cacheDB[dbType.name]!;

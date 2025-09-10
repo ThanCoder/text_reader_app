@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:text_reader/app/screens/home_screen.dart';
-import 'package:text_reader/other_libs/setting_v2.2.0/setting.dart';
+import 'package:text_reader/other_libs/setting_v2.3.0/setting.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
