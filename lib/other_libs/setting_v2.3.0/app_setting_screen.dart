@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
+import 'package:text_reader/app/core/types/database_types.dart';
+import 'package:text_reader/app/services/post_services.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 import 'setting.dart';
@@ -52,68 +54,14 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
         appBar: AppBar(title: const Text('Setting')),
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // theme
               ThemeComponent(),
               //custom path
-              TListTileWithDesc(
-                title: "Config Custom Path",
-                desc: "သင်ကြိုက်နှစ်သက်တဲ့ path ကို ထည့်ပေးပါ",
-                trailing: Checkbox(
-                  value: config.isUseCustomPath,
-                  onChanged: (value) {
-                    setState(() {
-                      config.isUseCustomPath = value!;
-                      isChanged = true;
-                    });
-                  },
-                ),
-              ),
-              config.isUseCustomPath
-                  ? TListTileWithDescWidget(
-                      widget1: TextField(
-                        controller: customPathTextController,
-                        onTap: () {
-                          if (!isCustomPathTextControllerTextSelected) {
-                            customPathTextController.selectAll();
-                            isCustomPathTextControllerTextSelected = true;
-                          }
-                        },
-                        onTapOutside: (event) {
-                          isCustomPathTextControllerTextSelected = false;
-                        },
-                      ),
-                      widget2: IconButton(
-                        onPressed: () {
-                          _saveConfig();
-                        },
-                        icon: const Icon(Icons.save),
-                      ),
-                    )
-                  : SizedBox.shrink(),
-              //proxy server
-              // TListTileWithDesc(
-              //   title: 'Custom Proxy Server',
-              //   trailing: Switch.adaptive(
-              //     value: config.isUseProxyServer,
-              //     onChanged: (value) {
-              //       setState(() {
-              //         config.isUseProxyServer = value;
-              //         isChanged = true;
-              //       });
-              //     },
-              //   ),
-              // ),
-              // config.isUseProxyServer
-              //     ? ForwardProxyTTextField(
-              //         controller: forwardProxyController,
-              //         onChanged: (value) {
-              //           config.forwardProxyUrl = value;
-              //           isChanged = true;
-              //           setState(() {});
-              //         },
-              //       )
-              //     : SizedBox.shrink(),
+              _getCustomPath(),
+              // database switcher
+              _getDatabaseSwitcher(),
             ],
           ),
         ),
@@ -125,6 +73,80 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
                 child: const Icon(Icons.save),
               )
             : null,
+      ),
+    );
+  }
+
+  Widget _getCustomPath() {
+    return Column(
+      children: [
+        TListTileWithDesc(
+          title: "Config Custom Path",
+          desc: "သင်ကြိုက်နှစ်သက်တဲ့ path ကို ထည့်ပေးပါ",
+          trailing: Checkbox(
+            value: config.isUseCustomPath,
+            onChanged: (value) {
+              setState(() {
+                config.isUseCustomPath = value!;
+                isChanged = true;
+              });
+            },
+          ),
+        ),
+        config.isUseCustomPath
+            ? TListTileWithDescWidget(
+                widget1: TextField(
+                  controller: customPathTextController,
+                  onTap: () {
+                    if (!isCustomPathTextControllerTextSelected) {
+                      customPathTextController.selectAll();
+                      isCustomPathTextControllerTextSelected = true;
+                    }
+                  },
+                  onTapOutside: (event) {
+                    isCustomPathTextControllerTextSelected = false;
+                  },
+                ),
+                widget2: IconButton(
+                  onPressed: () {
+                    _saveConfig();
+                  },
+                  icon: const Icon(Icons.save),
+                ),
+              )
+            : SizedBox.shrink(),
+      ],
+    );
+  }
+
+  Widget _getDatabaseSwitcher() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 5,
+        children: [
+          Text('Database အမျိုးအစားများ'),
+          DropdownButton<DatabaseTypes>(
+            padding: EdgeInsets.all(5),
+            borderRadius: BorderRadius.circular(4),
+            value: config.databaseType,
+            items: DatabaseTypes.values
+                .map(
+                  (e) => DropdownMenuItem<DatabaseTypes>(
+                    value: e,
+                    child: Text(e.name.toCaptalize()),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) {
+              setState(() {
+                config.databaseType = value!;
+                isChanged = true;
+              });
+            },
+          ),
+        ],
       ),
     );
   }
@@ -145,6 +167,8 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
       config.customPath = customPathTextController.text;
       //save
       await config.save();
+      // clear database
+      PostServices.clearDBCache();
 
       if (!mounted) return;
       setState(() {

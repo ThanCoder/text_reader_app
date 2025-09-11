@@ -55,14 +55,12 @@ class _BookmarkSliverListState extends State<BookmarkSliverList>
             return ListTile(
               title: Text(book.title),
               onTap: () async {
-                final path = await PostServices.getDB.storage.getPath(
-                  book.title,
-                );
+                final path = await PostServices.getDB.storage.getPath(book.id);
                 if (path == null) {
                   debugPrint('path is null');
                   return;
                 }
-                final post = Post.fromPath(path);
+                final post = Post.create(id: book.id, title: book.title);
                 if (!context.mounted) return;
                 goTextReader(context, post: post);
               },

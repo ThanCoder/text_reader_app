@@ -10,6 +10,7 @@ class BookmarkDatabase extends JsonDatabase<Bookmark> {
         storage: FileStorage(root: PathUtil.getLibaryPath()),
       );
 
+
   @override
   Bookmark from(Map<String, dynamic> map) {
     return Bookmark.fromMap(map);

@@ -102,6 +102,7 @@ class PathUtil {
     required Directory oldDir,
     required Directory newDir,
   }) async {
+    if (oldDir.path == newDir.path) return;
     if (!oldDir.existsSync()) {
       throw Exception('Old Folder Not Found!');
     }

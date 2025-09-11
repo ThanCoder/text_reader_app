@@ -21,7 +21,6 @@ class EditPostScreen extends StatefulWidget {
 }
 
 class _EditPostScreenState extends State<EditPostScreen> {
-  late Post post;
   final titleController = TextEditingController();
   final bodyController = TextEditingController();
   final titleFocusNode = FocusNode();
@@ -33,10 +32,9 @@ class _EditPostScreenState extends State<EditPostScreen> {
 
   @override
   void initState() {
-    post = widget.post;
-    titleController.text = post.title;
-    if (post.body.isNotEmpty) {
-      bodyController.text = post.body;
+    titleController.text = widget.post.title;
+    if (widget.post.body.isNotEmpty) {
+      bodyController.text = widget.post.body;
     } else {
       // bodyController.text = post.getBody;
     }
@@ -67,7 +65,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
               children: [
                 // cover
                 TCoverChooser(
-                  coverPath: post.getCoverPath,
+                  coverPath: widget.post.getCoverPath,
                   onChanged: () {
                     titleFocusNode.unfocus();
                     bodyFocusNode.unfocus();
@@ -80,6 +78,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
                   isSelectedAll: true,
                   errorText: titleError,
                   onChanged: _onTitleChanged,
+                  onSubmitted: (_) => _onUpdate(),
                 ),
                 // tags
                 // TTagsWrapView(
@@ -115,7 +114,15 @@ class _EditPostScreenState extends State<EditPostScreen> {
     return await file.readAsString();
   }
 
-  String get _getPostPath => '${PostServices.getDB.root}/${widget.post.id}';
+  String get _getPostPath {
+    final dir = Directory(
+      '${PostServices.getDB.storage.root}/${widget.post.id}',
+    );
+    if (!dir.existsSync()) {
+      dir.create();
+    }
+    return dir.path;
+  }
 
   void _onTitleChanged(String text) {
     if (text.isEmpty) return;
@@ -131,16 +138,30 @@ class _EditPostScreenState extends State<EditPostScreen> {
   }
 
   void _onUpdate() async {
-    setState(() {
-      isLoading = true;
-    });
-    post.title = titleController.text;
-    final file = File('$_getPostPath/$currentIndex');
-    await file.writeAsString(bodyController.text);
-    if (!mounted) return;
-    // close
-    Navigator.pop(context);
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      final file = File('$_getPostPath/$currentIndex');
+      await file.writeAsString(bodyController.text);
+      // change id
 
-    widget.onUpdated(post);
+      if (!mounted) return;
+      // close
+      Navigator.pop(context);
+
+      widget.onUpdated(
+        widget.post.copyWith(
+          id: titleController.text,
+          title: titleController.text,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      showTMessageDialogError(context, e.toString());
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 }

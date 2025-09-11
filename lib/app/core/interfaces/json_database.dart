@@ -15,10 +15,11 @@ abstract class JsonDatabase<T> extends Database<T> {
   Map<String, dynamic> to(T value);
 
   @override
-  Future<void> add(T value) async {
+  Future<T> add(T value) async {
     final list = await getAll();
     list.add(value);
     await save(list);
+    return value;
   }
 
   @override

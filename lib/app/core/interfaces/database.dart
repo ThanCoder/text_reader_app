@@ -10,7 +10,7 @@ abstract class Database<T> {
   Database({required this.root, required this.storage});
 
   Future<List<T>> getAll();
-  Future<void> add(T value);
+  Future<T> add(T value);
   Future<void> update(String id, T value);
   Future<void> delete(String id);
   // listener

@@ -4,8 +4,9 @@
  "browserForwardProxyUrl": "",
  "proxyUrl": "",
  "hostUrl": "",
- "isUseCustomPath": true,
+ "isUseCustomPath": false,
  "isUseForwardProxy": false,
  "isUseProxy": false,
- "isDarkTheme": true
+ "isDarkTheme": true,
+ "databaseType": "json"
 }

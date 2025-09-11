@@ -2,7 +2,7 @@ import 'package:text_reader/app/bookmark/bookmark_services.dart';
 import 'package:text_reader/app/core/factory/database_factory.dart';
 import 'package:text_reader/app/core/interfaces/database.dart';
 import 'package:text_reader/app/core/models/post.dart';
-import 'package:text_reader/app/core/types/database_types.dart';
+import 'package:text_reader/other_libs/setting_v2.3.0/setting.dart';
 
 class PostServices {
   static final Map<String, Database<Post>> _cacheDB = {};
@@ -22,18 +22,13 @@ class PostServices {
     return list;
   }
 
-  static Future<String> getAbsPath(String name) async {
-    final db = PostServices.getDB;
-    return db.storage.root;
-  }
-
   static void clearDBCache() {
     _cacheDB.clear();
     BookmarkServices.clearDB();
   }
 
   static Database<Post> get getDB {
-    final dbType = DatabaseTypes.folder;
+    final dbType = Setting.getAppConfig.databaseType;
     final db = _cacheDB[dbType.name];
     if (db == null) {
       _cacheDB[dbType.name] = DatabaseFactory.create<Post>(type: dbType);

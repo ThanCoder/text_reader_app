@@ -1,12 +1,17 @@
 import 'package:text_reader/app/bookmark/bookmark.dart';
 import 'package:text_reader/app/bookmark/bookmark_database.dart';
+import 'package:text_reader/other_libs/setting_v2.3.0/setting.dart';
 
 class BookmarkServices {
   static BookmarkDatabase? _cacheDB;
 
   static Future<List<Bookmark>> getAll() async {
     final db = getDB;
-    return db.getAll();
+    final list = await db.getAll();
+    final dbList = list
+        .where((e) => e.databaseType == Setting.getAppConfig.databaseType)
+        .toList();
+    return dbList;
   }
 
   static BookmarkDatabase get getDB {
@@ -20,7 +25,10 @@ class BookmarkServices {
 
   static Future<bool> isExists(String id) async {
     final list = await getAll();
-    final index = list.indexWhere((e) => e.id == id);
+    final dbList = list
+        .where((e) => e.databaseType == Setting.getAppConfig.databaseType)
+        .toList();
+    final index = dbList.indexWhere((e) => e.id == id);
     return index != -1;
   }
 }

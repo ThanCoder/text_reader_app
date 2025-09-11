@@ -4,6 +4,7 @@ import 'package:text_reader/app/bookmark/bookmark.dart';
 import 'package:text_reader/app/bookmark/bookmark_services.dart';
 import 'package:text_reader/app/core/interfaces/database.dart';
 import 'package:text_reader/app/core/models/post.dart';
+import 'package:text_reader/other_libs/setting_v2.3.0/setting.dart';
 
 class BookmarkButton extends StatefulWidget {
   Post post;
@@ -69,7 +70,11 @@ class _BookmarkButtonState extends State<BookmarkButton> with DatabaseListener {
 
   void _toggle() async {
     final db = BookmarkServices.getDB;
-    final book = Bookmark(title: widget.post.title, id: widget.post.id);
+    final book = Bookmark.create(
+      title: widget.post.title,
+      id: widget.post.id,
+      databaseType: Setting.getAppConfig.databaseType,
+    );
     if (isExists) {
       db.delete(book.id);
     } else {

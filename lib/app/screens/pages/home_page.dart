@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
     TSort(id: 1, title: 'Random', ascTitle: 'Random', descTitle: 'No Random'),
   ];
   int sortId = TSort.getDateId;
-  bool isSortIsAsc = true;
+  bool isSortIsAsc = false;
 
   Future<void> init() async {
     try {
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
 
   void _onSort() {
     if (sortId == TSort.getDateId) {
-      postList.sortDate(isNewest: isSortIsAsc);
+      postList.sortDate(isNewest: !isSortIsAsc);
     }
     if (sortId == TSort.getTitleId) {
       postList.sortTitle(isAtoZ: isSortIsAsc);
@@ -189,8 +189,9 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
         return res == -1 ? null : 'post ရှိနေပါတယ်.အမည်ပြောင်းလဲပေးပါ!';
       },
       onSubmit: (text) async {
-        final post = Post.create(title: text, id: text);
-        await PostServices.getDB.add(post);
+        final post = await PostServices.getDB.add(
+          Post.create(title: text, id: text),
+        );
         if (!mounted) return;
         goRoute(
           context,
@@ -198,7 +199,12 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
             post: post,
             isUpdate: true,
             onUpdated: (updatedPost) {
-              PostServices.getDB.update(post.id, updatedPost);
+              try {
+                PostServices.getDB.update(post.id, updatedPost);
+              } catch (e) {
+                if (!mounted) return;
+                showTMessageDialogError(context, e.toString());
+              }
             },
           ),
         );

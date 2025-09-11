@@ -34,6 +34,22 @@ class Post {
     );
   }
 
+  Post copyWith({
+    String? id,
+    String? title,
+    String? tags,
+    String? body,
+    DateTime? date,
+  }) {
+    return Post(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      tags: tags ?? this.tags,
+      body: body ?? this.body,
+      date: date ?? this.date,
+    );
+  }
+
   factory Post.fromPath(String path) {
     final file = File(path);
     return Post(

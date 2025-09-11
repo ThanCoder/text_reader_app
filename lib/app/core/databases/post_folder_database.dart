@@ -17,12 +17,15 @@ class PostFolderDatabase extends FolderDatabase<Post> {
     final oldDir = Directory('$root/$id');
     final newDir = Directory('$root/${value.id}');
     await PathUtil.renameDir(oldDir: oldDir, newDir: newDir);
+    notify();
   }
 
   @override
-  Future<void> add(Post value) async {
+  Future<Post> add(Post value) async {
     final dir = Directory('$root/${value.id}');
     await dir.create();
+    notify();
+    return value;
   }
 
   @override
