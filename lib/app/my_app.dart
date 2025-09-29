@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:text_reader/app/screens/home_screen.dart';
-import 'package:text_reader/other_libs/setting_v2.3.0/setting.dart';
+import 'package:text_reader/other_libs/setting_v2.3.0/core/theme_switcher.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: Setting.getAppConfigNotifier,
-      builder: (context, config, child) {
+    return ThemeSwitcher(
+      builder: (config) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           darkTheme: ThemeData.dark(useMaterial3: true),

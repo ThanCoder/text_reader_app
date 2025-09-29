@@ -27,6 +27,6 @@ abstract class FolderDatabase<T> extends Database<T> {
     final dir = Directory('$root/$id');
     if (!dir.existsSync()) return;
     await PathUtil.deleteDir(dir);
-    notify();
+    notify(DatabaseListenerTypes.deleted);
   }
 }

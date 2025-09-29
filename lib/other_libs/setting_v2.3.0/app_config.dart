@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:text_reader/app/core/types/database_types.dart';
+import 'package:text_reader/other_libs/setting_v2.3.0/core/theme_services.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 import 'setting.dart';
@@ -18,6 +19,7 @@ class AppConfig {
   bool isUseProxy;
   bool isDarkTheme;
   DatabaseTypes databaseType;
+  ThemeModes themeMode;
   AppConfig({
     required this.customPath,
     required this.forwardProxyUrl,
@@ -29,6 +31,7 @@ class AppConfig {
     required this.isUseProxy,
     required this.isDarkTheme,
     required this.databaseType,
+    required this.themeMode,
   });
 
   factory AppConfig.create({
@@ -42,6 +45,7 @@ class AppConfig {
     bool isUseProxy = false,
     bool isDarkTheme = false,
     DatabaseTypes databaseType = DatabaseTypes.folder,
+    ThemeModes themeMode = ThemeModes.light,
   }) {
     return AppConfig(
       customPath: customPath,
@@ -54,6 +58,7 @@ class AppConfig {
       isUseProxy: isUseProxy,
       isDarkTheme: isDarkTheme,
       databaseType: databaseType,
+      themeMode: themeMode,
     );
   }
 
@@ -70,11 +75,13 @@ class AppConfig {
       'isUseProxy': isUseProxy,
       'isDarkTheme': isDarkTheme,
       'databaseType': databaseType.name,
+      'themeMode': themeMode.name,
     };
   }
 
   factory AppConfig.fromMap(Map<String, dynamic> map) {
     final databaseTypeStr = map.getString(['databaseType']);
+    final themeModeStr = map.getString(['themeMode']);
     return AppConfig(
       customPath: map['customPath'] as String,
       forwardProxyUrl: map['forwardProxyUrl'] as String,
@@ -86,6 +93,7 @@ class AppConfig {
       isUseProxy: map['isUseProxy'] as bool,
       isDarkTheme: map['isDarkTheme'] as bool,
       databaseType: DatabaseTypes.getType(databaseTypeStr),
+      themeMode: ThemeModes.getName(themeModeStr),
     );
   }
 
@@ -100,6 +108,7 @@ class AppConfig {
     bool? isUseProxy,
     bool? isDarkTheme,
     DatabaseTypes? databaseType,
+    ThemeModes? themeMode,
   }) {
     return AppConfig(
       customPath: customPath ?? this.customPath,
@@ -113,6 +122,7 @@ class AppConfig {
       isUseProxy: isUseProxy ?? this.isUseProxy,
       isDarkTheme: isDarkTheme ?? this.isDarkTheme,
       databaseType: databaseType ?? this.databaseType,
+      themeMode: themeMode ?? this.themeMode,
     );
   }
 

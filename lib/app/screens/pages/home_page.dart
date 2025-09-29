@@ -29,9 +29,11 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
   }
 
   @override
-  void onDatabaseChanged() {
-    if (!mounted) return;
-    init();
+  void onDatabaseChanged(DatabaseListenerTypes type, String? id) {
+    if (type == DatabaseListenerTypes.saved) {
+      if (!mounted) return;
+      init();
+    }
   }
 
   @override

@@ -7,13 +7,11 @@ class MorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('More Page'),
-      ),
+      appBar: AppBar(title: Text('More Page')),
       body: Column(
         children: [
           // theme
-          Setting.getThemeSwitcherWidget,
+          Setting.getThemeModeChooserWidget,
           Divider(),
           Setting.getSettingListTileWidget,
           // setting

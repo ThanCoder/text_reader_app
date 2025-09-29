@@ -27,10 +27,10 @@ abstract class Database<T> {
     _listener.clear();
   }
 
-  void notify() {
+  void notify(DatabaseListenerTypes type, {String? id}) {
     try {
       for (var ev in _listener) {
-        ev.onDatabaseChanged();
+        ev.onDatabaseChanged(type, id);
       }
     } catch (e) {
       debugPrint('[Database:notify]: ${e.toString()}');
@@ -39,5 +39,7 @@ abstract class Database<T> {
 }
 
 mixin DatabaseListener {
-  void onDatabaseChanged();
+  void onDatabaseChanged(DatabaseListenerTypes type, String? id);
 }
+
+enum DatabaseListenerTypes { added, saved, updated, deleted }

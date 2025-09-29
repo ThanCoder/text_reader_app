@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:text_reader/app/core/types/database_types.dart';
 import 'package:text_reader/app/services/post_services.dart';
+import 'package:text_reader/other_libs/setting_v2.3.0/core/theme_modes_chooser.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 import 'setting.dart';
 import 'core/android_app_services.dart';
 import 'app_config.dart';
 import 'core/app_notifier.dart';
-import 'core/theme_component.dart';
 
 class AppSettingScreen extends StatefulWidget {
   const AppSettingScreen({super.key});
@@ -57,7 +57,7 @@ class _AppSettingScreenState extends State<AppSettingScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // theme
-              ThemeComponent(),
+              ThemeModesChooser(),
               //custom path
               _getCustomPath(),
               // database switcher

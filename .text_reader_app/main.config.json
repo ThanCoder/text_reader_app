@@ -7,6 +7,7 @@
  "isUseCustomPath": false,
  "isUseForwardProxy": false,
  "isUseProxy": false,
- "isDarkTheme": true,
- "databaseType": "json"
+ "isDarkTheme": false,
+ "databaseType": "json",
+ "themeMode": "light"
 }

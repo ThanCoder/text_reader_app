@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:text_reader/app/core/interfaces/database.dart';
 import 'package:text_reader/app/core/interfaces/file_storage.dart';
 import 'package:text_reader/app/core/interfaces/folder_database.dart';
 import 'package:text_reader/app/core/models/post.dart';
@@ -17,14 +18,14 @@ class PostFolderDatabase extends FolderDatabase<Post> {
     final oldDir = Directory('$root/$id');
     final newDir = Directory('$root/${value.id}');
     await PathUtil.renameDir(oldDir: oldDir, newDir: newDir);
-    notify();
+    notify(DatabaseListenerTypes.updated, id: id);
   }
 
   @override
   Future<Post> add(Post value) async {
     final dir = Directory('$root/${value.id}');
     await dir.create();
-    notify();
+    notify(DatabaseListenerTypes.added, id: value.id);
     return value;
   }
 

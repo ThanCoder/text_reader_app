@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:text_reader/other_libs/setting_v2.3.0/core/theme_modes_chooser.dart';
 import 'package:than_pkg/than_pkg.dart';
 
 import 'core/index.dart';
@@ -23,6 +24,7 @@ class Setting {
   //widget
   static Widget get getHomeScreen => AppSettingScreen();
   static Widget get getThemeSwitcherWidget => ThemeComponent();
+  static Widget get getThemeModeChooserWidget => ThemeModesChooser();
   static Widget get getSettingListTileWidget => AppSettingListTile();
   static Widget get getCurrentVersionWidget => AppCurrentVersion();
   static Widget get getCacheManagerWidget => AppCacheManager();

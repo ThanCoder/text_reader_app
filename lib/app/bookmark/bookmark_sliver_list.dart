@@ -30,7 +30,7 @@ class _BookmarkSliverListState extends State<BookmarkSliverList>
   }
 
   @override
-  void onDatabaseChanged() {
+  void onDatabaseChanged(DatabaseListenerTypes type, String? id) {
     if (!mounted) return;
     setState(() {});
   }

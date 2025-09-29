@@ -16,16 +16,16 @@ class BookmarkButton extends StatefulWidget {
 
 class _BookmarkButtonState extends State<BookmarkButton> with DatabaseListener {
   @override
-  void onDatabaseChanged() {
-    if (!mounted) return;
-    init();
-  }
-
-  @override
   void initState() {
     BookmarkServices.getDB.addListener(this);
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => init());
+  }
+
+  @override
+  void onDatabaseChanged(DatabaseListenerTypes type, String? id) {
+    if (!mounted) return;
+    init();
   }
 
   @override
