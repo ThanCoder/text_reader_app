@@ -58,6 +58,12 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
       setState(() {
         isLoading = true;
       });
+      // recent
+      if (TRecentDB.getInstance.getInt('home-sort-id', def: -1) != -1) {
+        sortId = TRecentDB.getInstance.getInt('home-sort-id');
+      }
+      isSortIsAsc = TRecentDB.getInstance.getBool('home-sort-asc');
+
       postList = await PostServices.getAll();
 
       if (!mounted) return;
@@ -133,6 +139,9 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
       sortDialogCallback: (id, isAsc) {
         isSortIsAsc = isAsc;
         sortId = id;
+        //set recent
+        TRecentDB.getInstance.putInt('home-sort-id', id);
+        TRecentDB.getInstance.putBool('home-sort-asc', isAsc);
         _onSort();
       },
     );

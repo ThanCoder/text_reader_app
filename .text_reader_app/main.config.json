@@ -8,6 +8,6 @@
  "isUseForwardProxy": false,
  "isUseProxy": false,
  "isDarkTheme": false,
- "databaseType": "json",
+ "databaseType": "folder",
  "themeMode": "light"
 }

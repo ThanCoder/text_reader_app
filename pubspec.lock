@@ -34,7 +34,7 @@ packages:
     source: hosted
     version: "2.1.2"
   change_app_package_name:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: change_app_package_name
       sha256: "8e43b754fe960426904d77ed4c62fa8c9834deaf6e293ae40963fa447482c4c5"
@@ -231,7 +231,7 @@ packages:
     source: hosted
     version: "4.5.2"
   flutter_launcher_icons:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: flutter_launcher_icons
       sha256: "10f13781741a2e3972126fae08393d3c4e01fa4cd7473326b94b72cf594195e7"
@@ -246,6 +246,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  flutter_markdown:
+    dependency: "direct main"
+    description:
+      name: flutter_markdown
+      sha256: "08fb8315236099ff8e90cb87bb2b935e0a724a3af1623000a9cec930468e0f27"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.7+1"
   flutter_shaders:
     dependency: transitive
     description:
@@ -352,6 +360,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.1.1"
+  markdown:
+    dependency: transitive
+    description:
+      name: markdown
+      sha256: "935e23e1ff3bc02d390bad4d4be001208ee92cc217cb5b5a6c19bc14aaa318c1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.3.0"
   matcher:
     dependency: transitive
     description:
@@ -420,10 +436,10 @@ packages:
     dependency: transitive
     description:
       name: petitparser
-      sha256: "07c8f0b1913bcde1ff0d26e57ace2f3012ccbf2b204e070290dad3bb22797646"
+      sha256: "1a97266a94f7350d30ae522c0af07890c70b8e62c71e8e3920d1db4d23c057d1"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "7.0.1"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -533,22 +549,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  t_client:
+    dependency: "direct main"
+    description:
+      name: t_client
+      sha256: e3051f06ea51afaecb697324ac515dba8355183caee8ab03c43ecb90abe2fb65
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.6"
   t_html_parser:
     dependency: "direct main"
     description:
       name: t_html_parser
-      sha256: "402bd81655ebc955b50a34cc920fabefc0ddd395d5bfd60d630275b6fddf6a2d"
+      sha256: "636ad772b9d1c14d630c3ad624303e92c569dc3ccb4d54cb9b69f582857198b4"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.1"
   t_widgets:
     dependency: "direct main"
     description:
       name: t_widgets
-      sha256: "66a4923e62af472d51e3983c9734eac646c327c7e3dace24c3c944d670f29f6b"
+      sha256: ad9d71e850c5d9cfd4caf70cfb6c059ef21cc255edcebdcc8f24c2d166c9f4ab
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.2"
+    version: "1.5.1"
   term_glyph:
     dependency: transitive
     description:
@@ -569,10 +593,10 @@ packages:
     dependency: "direct main"
     description:
       name: than_pkg
-      sha256: "1821edfb72fb016a620c5c4e7b8a8c5d2fc9c64ff988e8e40d2922e52d0f7366"
+      sha256: "4f98d26126bac8068e7140f5cdf676adf1240ac77440f332afe0d31d48f12add"
       url: "https://pub.dev"
     source: hosted
-    version: "3.6.0"
+    version: "4.5.3"
   timeago:
     dependency: transitive
     description:
@@ -641,10 +665,10 @@ packages:
     dependency: transitive
     description:
       name: xml
-      sha256: b015a8ad1c488f66851d762d3090a21c600e479dc75e68328c52774040cf9226
+      sha256: "971043b3a0d3da28727e40ed3e0b5d18b742fa5a68665cca88e74b7876d5e025"
       url: "https://pub.dev"
     source: hosted
-    version: "6.5.0"
+    version: "6.6.1"
   yaml:
     dependency: transitive
     description:

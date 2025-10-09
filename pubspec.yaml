@@ -7,22 +7,24 @@ environment:
   sdk: ^3.9.0
 
 dependencies:
-  change_app_package_name: ^1.5.0
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
-  flutter_launcher_icons: ^0.14.4
   provider: ^6.1.5
-  t_widgets: ^1.1.2
-  than_pkg: ^3.6.0
+  t_widgets: ^1.5.1
+  than_pkg: ^4.5.3
   uuid: ^4.5.1
   dio: ^5.9.0
-  t_html_parser: ^1.0.0
+  t_html_parser: ^1.1.1
   flutter_animate: ^4.5.2
+  t_client: ^0.1.6
+  flutter_markdown: ^0.7.7+1
 
 dev_dependencies:
   # dart run change_app_package_name:main [com.new.package.name]
   # dart run flutter_launcher_icons
+  change_app_package_name: ^1.5.0
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
@@ -37,6 +39,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - CHANGELOG.md
+    - README.md
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

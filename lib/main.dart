@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:text_reader/app/services/post_services.dart';
+import 'package:text_reader/other_libs/setting_v2.3.0/core/path_util.dart';
 import 'package:text_reader/other_libs/setting_v2.3.0/setting.dart';
 import 'package:than_pkg/than_pkg.dart';
 import 'app/my_app.dart';
@@ -26,7 +27,10 @@ void main() async {
       PostServices.clearDBCache();
     },
   );
-  // fetcher
+  // recent
+  await TRecentDB.getInstance.init(
+    rootPath: PathUtil.getDatabasePath(name: 'recent.db.json'),
+  );
 
   runApp(MyApp());
 }
