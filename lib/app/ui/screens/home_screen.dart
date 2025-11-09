@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:text_reader/app/screens/pages/home_page.dart';
-import 'package:text_reader/app/screens/pages/libary_page.dart';
-import 'package:text_reader/app/screens/pages/more_page.dart';
+import 'package:text_reader/app/ui/screens/pages/home_page.dart';
+import 'package:text_reader/app/ui/screens/pages/libary_page.dart';
+import 'package:text_reader/app/ui/screens/pages/more_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

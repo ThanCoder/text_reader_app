@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:t_widgets/widgets/t_loader.dart';
-import 'package:text_reader/app/bookmark/bookmark.dart';
-import 'package:text_reader/app/bookmark/bookmark_services.dart';
+import 'package:text_reader/app/ui/bookmark/bookmark.dart';
+import 'package:text_reader/app/ui/bookmark/bookmark_services.dart';
 import 'package:text_reader/app/core/interfaces/database.dart';
 import 'package:text_reader/app/core/models/post.dart';
 import 'package:text_reader/other_libs/setting_v2.3.0/setting.dart';

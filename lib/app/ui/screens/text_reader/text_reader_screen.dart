@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:text_reader/app/bookmark/bookmark_button.dart';
+import 'package:text_reader/app/ui/bookmark/bookmark_button.dart';
 import 'package:text_reader/app/core/models/post.dart';
-import 'package:text_reader/app/screens/text_reader/reader_config.dart';
-import 'package:text_reader/app/screens/text_reader/reader_config_dialog.dart';
+import 'package:text_reader/app/ui/screens/text_reader/reader_config.dart';
+import 'package:text_reader/app/ui/screens/text_reader/reader_config_dialog.dart';
 import 'package:text_reader/app/services/post_services.dart';
 import 'package:than_pkg/than_pkg.dart';
 

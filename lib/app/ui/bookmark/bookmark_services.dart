@@ -1,5 +1,5 @@
-import 'package:text_reader/app/bookmark/bookmark.dart';
-import 'package:text_reader/app/bookmark/bookmark_database.dart';
+import 'package:text_reader/app/ui/bookmark/bookmark.dart';
+import 'package:text_reader/app/ui/bookmark/bookmark_database.dart';
 import 'package:text_reader/other_libs/setting_v2.3.0/setting.dart';
 
 class BookmarkServices {

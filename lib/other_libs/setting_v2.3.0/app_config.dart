@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:t_widgets/theme/t_theme_services.dart';
 import 'package:text_reader/app/core/types/database_types.dart';
-import 'package:text_reader/other_libs/setting_v2.3.0/core/theme_services.dart';
+
 import 'package:than_pkg/than_pkg.dart';
 
 import 'setting.dart';
@@ -19,7 +20,7 @@ class AppConfig {
   bool isUseProxy;
   bool isDarkTheme;
   DatabaseTypes databaseType;
-  ThemeModes themeMode;
+  TThemeModes themeMode;
   AppConfig({
     required this.customPath,
     required this.forwardProxyUrl,
@@ -45,7 +46,7 @@ class AppConfig {
     bool isUseProxy = false,
     bool isDarkTheme = false,
     DatabaseTypes databaseType = DatabaseTypes.folder,
-    ThemeModes themeMode = ThemeModes.light,
+    TThemeModes themeMode = TThemeModes.light,
   }) {
     return AppConfig(
       customPath: customPath,
@@ -93,7 +94,7 @@ class AppConfig {
       isUseProxy: map['isUseProxy'] as bool,
       isDarkTheme: map['isDarkTheme'] as bool,
       databaseType: DatabaseTypes.getType(databaseTypeStr),
-      themeMode: ThemeModes.getName(themeModeStr),
+      themeMode: TThemeModes.getName(themeModeStr),
     );
   }
 
@@ -108,7 +109,7 @@ class AppConfig {
     bool? isUseProxy,
     bool? isDarkTheme,
     DatabaseTypes? databaseType,
-    ThemeModes? themeMode,
+    TThemeModes? themeMode,
   }) {
     return AppConfig(
       customPath: customPath ?? this.customPath,

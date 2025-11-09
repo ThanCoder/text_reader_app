@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:than_pkg/extensions/file_system_entity_extension.dart';
+import 'package:than_pkg/services/t_map.dart';
 import 'package:uuid/uuid.dart';
 
 class Post {
+  int indexId;
   String id;
   String title;
   String tags;
@@ -12,6 +14,7 @@ class Post {
 
   Post({
     required this.id,
+    required this.indexId,
     required this.title,
     required this.tags,
     required this.body,
@@ -19,6 +22,7 @@ class Post {
   });
 
   factory Post.create({
+    required int indexId,
     String? id,
     String title = 'Untitled',
     String tags = '',
@@ -26,6 +30,7 @@ class Post {
     DateTime? date,
   }) {
     return Post(
+      indexId: indexId,
       id: id ?? Uuid().v4(),
       title: title,
       tags: tags,
@@ -36,12 +41,14 @@ class Post {
 
   Post copyWith({
     String? id,
+    int? indexId,
     String? title,
     String? tags,
     String? body,
     DateTime? date,
   }) {
     return Post(
+      indexId: indexId ?? this.indexId,
       id: id ?? this.id,
       title: title ?? this.title,
       tags: tags ?? this.tags,
@@ -50,9 +57,10 @@ class Post {
     );
   }
 
-  factory Post.fromPath(String path) {
+  factory Post.fromPath(String path, {int indexId = 0}) {
     final file = File(path);
     return Post(
+      indexId: indexId,
       id: file.getName(),
       title: file.getName(),
       tags: '',
@@ -63,6 +71,7 @@ class Post {
 
   // map
   Map<String, dynamic> toMap() => {
+    'indexId': indexId,
     'id': id,
     'title': title,
     'tags': tags,
@@ -72,6 +81,7 @@ class Post {
   factory Post.fromMap(Map<String, dynamic> map) {
     int dateInt = map['date'];
     return Post(
+      indexId: map.getInt(['indexId']),
       id: map['id'],
       title: map['title'],
       tags: map['tags'],

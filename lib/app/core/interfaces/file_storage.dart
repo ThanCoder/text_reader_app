@@ -45,7 +45,6 @@ class FileStorage extends Storage {
 
   @override
   Future<void> writeStream(String id, Stream<List<int>> data, int bytesLength) {
-    // TODO: implement writeStream
     throw UnimplementedError();
   }
 }

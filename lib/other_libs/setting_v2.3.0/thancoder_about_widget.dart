@@ -51,10 +51,37 @@ class ThancoderAboutWidget extends StatelessWidget {
         ),
         Divider(),
         ListTile(
+          leading: Icon(Icons.menu_book),
+          title: Text('Package:[pubspec.yaml]'),
+          onTap: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MarkdownReader(
+                  assetFileName: 'pubspec.yaml',
+                  title: Text('Package:[pubspec.yaml]'),
+                ),
+              ),
+            );
+          },
+        ),
+        Divider(),
+        ListTile(
           leading: Icon(Icons.telegram),
           title: Text('Developer'),
           onTap: () {
             ThanPkg.platform.launch('https://t.me/thancoder_novel');
+          },
+        ),
+
+        Divider(),
+        ListTile(
+          leading: Icon(Icons.new_releases),
+          title: Text('App Release'),
+          onTap: () {
+            ThanPkg.platform.launch(
+              'https://github.com/ThanCoder/text_reader_app/releases',
+            );
           },
         ),
       ],

@@ -1,4 +1,4 @@
-import 'package:text_reader/app/bookmark/bookmark_services.dart';
+import 'package:text_reader/app/ui/bookmark/bookmark_services.dart';
 import 'package:text_reader/app/core/factory/database_factory.dart';
 import 'package:text_reader/app/core/interfaces/database.dart';
 import 'package:text_reader/app/core/models/post.dart';
@@ -25,6 +25,12 @@ class PostServices {
   static void clearDBCache() {
     _cacheDB.clear();
     BookmarkServices.clearDB();
+  }
+
+  static Future<bool> isExists(String title) async {
+    final db = await getDB.getAll();
+    final index = db.indexWhere((e) => e.title.trim() == title.trim());
+    return index != -1;
   }
 
   static Database<Post> get getDB {

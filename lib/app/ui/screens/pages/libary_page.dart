@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:text_reader/app/bookmark/bookmark_sliver_list.dart';
+import 'package:text_reader/app/ui/bookmark/bookmark_sliver_list.dart';
 
 class LibaryPage extends StatefulWidget {
   const LibaryPage({super.key});

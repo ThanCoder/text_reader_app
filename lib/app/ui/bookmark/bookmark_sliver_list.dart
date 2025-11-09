@@ -60,7 +60,7 @@ class _BookmarkSliverListState extends State<BookmarkSliverList>
                   debugPrint('path is null');
                   return;
                 }
-                final post = Post.create(id: book.id, title: book.title);
+                final post = Post.create(id: book.id, title: book.title,indexId: 0);
                 if (!context.mounted) return;
                 goTextReader(context, post: post);
               },

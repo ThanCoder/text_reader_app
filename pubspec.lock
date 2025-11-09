@@ -557,6 +557,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.6"
+  t_db:
+    dependency: "direct main"
+    description:
+      name: t_db
+      sha256: "7d681b033c292658f80bde95d4e1828bc924eb4e890d537efe8e832f199cfff4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   t_html_parser:
     dependency: "direct main"
     description:
@@ -569,10 +577,10 @@ packages:
     dependency: "direct main"
     description:
       name: t_widgets
-      sha256: ad9d71e850c5d9cfd4caf70cfb6c059ef21cc255edcebdcc8f24c2d166c9f4ab
+      sha256: "83c8ea0579b1a82f4c2aff9ba7e0f16be8549231f9b24da99b6a2439ec71c990"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.1"
+    version: "1.7.4"
   term_glyph:
     dependency: transitive
     description:
@@ -593,10 +601,10 @@ packages:
     dependency: "direct main"
     description:
       name: than_pkg
-      sha256: "4f98d26126bac8068e7140f5cdf676adf1240ac77440f332afe0d31d48f12add"
+      sha256: "6ddfdf6e1f4be183550982399249be0e433c0dd63b1ee474ce285281af8bf43d"
       url: "https://pub.dev"
     source: hosted
-    version: "4.5.3"
+    version: "5.0.0"
   timeago:
     dependency: transitive
     description:
@@ -678,5 +686,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.9.0 <4.0.0"
+  dart: ">=3.9.2 <4.0.0"
   flutter: ">=3.27.0"

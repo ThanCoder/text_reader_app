@@ -15,6 +15,7 @@ class MorePage extends StatelessWidget {
           // theme
           Setting.getThemeModeChooserWidget,
           Divider(),
+          Setting.getCurrentVersionWidget,
           Setting.getSettingListTileWidget,
           // setting
           Divider(),

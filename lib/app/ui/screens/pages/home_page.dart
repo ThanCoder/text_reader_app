@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:t_widgets/t_widgets.dart';
-import 'package:text_reader/app/bookmark/bookmark_button.dart';
+import 'package:text_reader/app/others/fetcher/screens/fetcher_home_screen.dart';
+import 'package:text_reader/app/ui/bookmark/bookmark_button.dart';
 import 'package:text_reader/app/core/interfaces/database.dart';
 import 'package:text_reader/app/core/models/post.dart';
-import 'package:text_reader/app/extension/post_extensions.dart';
+import 'package:text_reader/app/core/extension/post_extensions.dart';
 import 'package:text_reader/app/routes_helper.dart';
-import 'package:text_reader/app/screens/forms/edit_post_screen.dart';
-import 'package:text_reader/app/screens/search_screen.dart';
+import 'package:text_reader/app/ui/screens/forms/edit_post_screen.dart';
+import 'package:text_reader/app/ui/screens/search_screen.dart';
 import 'package:text_reader/app/services/post_services.dart';
 import 'package:than_pkg/than_pkg.dart';
 
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
 
   @override
   void onDatabaseChanged(DatabaseListenerTypes type, String? id) {
+    // print('type: $type - mounted: $mounted');
     if (type == DatabaseListenerTypes.saved) {
       if (!mounted) return;
       init();
@@ -58,13 +60,13 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
       setState(() {
         isLoading = true;
       });
+
+      postList = await PostServices.getAll();
       // recent
       if (TRecentDB.getInstance.getInt('home-sort-id', def: -1) != -1) {
         sortId = TRecentDB.getInstance.getInt('home-sort-id');
       }
       isSortIsAsc = TRecentDB.getInstance.getBool('home-sort-asc');
-
-      postList = await PostServices.getAll();
 
       if (!mounted) return;
       setState(() {
@@ -201,7 +203,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
       },
       onSubmit: (text) async {
         final post = await PostServices.getDB.add(
-          Post.create(title: text, id: text),
+          Post.create(title: text, id: text, indexId: 0),
         );
         if (!mounted) return;
         goRoute(
@@ -224,26 +226,7 @@ class _HomePageState extends State<HomePage> with DatabaseListener {
   }
 
   void _newPostFromFetcher() {
-    // goRoute(
-    //   context,
-    //   builder: (context) => FetcherScreen(
-    //     onFetched: (data) {
-    //       final box = Post.getBox;
-    //       final post = Post.create(title: data.title, body: data.contentText);
-    //       box.put(post.id, post);
-    //       goRoute(
-    //         context,
-    //         builder: (context) => EditPostScreen(
-    //           post: post,
-    //           isUpdate: true,
-    //           onUpdated: (updatedPost) {
-    //             Post.getBox.put(updatedPost.id, updatedPost);
-    //           },
-    //         ),
-    //       );
-    //     },
-    //   ),
-    // );
+    goRoute(context, builder: (context) => FetcherHomeScreen());
   }
 
   // item menu

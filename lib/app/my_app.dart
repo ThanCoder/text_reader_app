@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:text_reader/app/screens/home_screen.dart';
+import 'package:text_reader/app/ui/screens/home_screen.dart';
 import 'package:text_reader/other_libs/setting_v2.3.0/core/theme_switcher.dart';
 
 class MyApp extends StatefulWidget {

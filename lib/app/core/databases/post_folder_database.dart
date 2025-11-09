@@ -23,8 +23,12 @@ class PostFolderDatabase extends FolderDatabase<Post> {
 
   @override
   Future<Post> add(Post value) async {
-    final dir = Directory('$root/${value.id}');
+    final dir = Directory('$root/${value.title}');
     await dir.create();
+    // add content
+    final contentFile = File('${dir.path}/1');
+    contentFile.writeAsString(value.body);
+
     notify(DatabaseListenerTypes.added, id: value.id);
     return value;
   }
